@@ -1,0 +1,19 @@
+server:
+  port: 8082
+
+logging:
+  file:
+    path: D:\\LOG
+spring:
+  application:
+    name: pethub
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:3308/pethub?characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: wuyue930912
+    dbcp2:
+      min-idle: 5         #数据库连接池的最小维持连接数
+      initial-size: 5     #初始化提供的连接数
+      max-total: 50          #最大的连接数
+      max-wait-millis: 200        #等待连接获取的最大超时时间
