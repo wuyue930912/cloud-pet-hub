@@ -1,17 +1,20 @@
 package com.pet.service;
 
-import com.pet.vo.LoginVO;
+import com.pet.dao.SysUserDao;
+import com.pet.entity.SysUser;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class LoginService {
 
-    public ResponseEntity<String> login(LoginVO vo) {
+    private final ApplicationEventPublisher publisher;
 
-        return new ResponseEntity<>(vo.getUserName(), HttpStatus.OK);
-    }
+    private final SysUserDao sysUserDao;
+
 }

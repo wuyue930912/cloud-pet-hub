@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8080
 
 logging:
   file:
@@ -7,6 +7,11 @@ logging:
 spring:
   application:
     name: pethub
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
   datasource:
     url: jdbc:mariadb://127.0.0.1:3308/pethub?characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8
     driver-class-name: org.mariadb.jdbc.Driver
@@ -17,3 +22,15 @@ spring:
       initial-size: 5     #初始化提供的连接数
       max-total: 50          #最大的连接数
       max-wait-millis: 200        #等待连接获取的最大超时时间
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: MYSQL
+    show-sql: true
+    open-in-view: false
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
