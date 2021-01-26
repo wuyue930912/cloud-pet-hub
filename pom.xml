@@ -9,12 +9,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>base</module>
-        <module>common</module>
-        <module>applets</module>
+<!--        <module>base</module>-->
+<!--        <module>common</module>-->
+<!--        <module>applets</module>-->
         <module>maintain</module>
-        <module>app</module>
-        <module>web</module>
+<!--        <module>app</module>-->
+<!--        <module>web</module>-->
         <module>common</module>
     </modules>
 
