@@ -17,21 +17,21 @@ public class DruidConfig {
     public ServletRegistrationBean<StatViewServlet> druidServlet() {
         ServletRegistrationBean<StatViewServlet> servletRegistrationBean = new ServletRegistrationBean<>(
                 new StatViewServlet(), "/druid/*");
-        servletRegistrationBean.addInitParameter("allow", "127.0.0.1,129.168.1.11");//白名单
-        servletRegistrationBean.addInitParameter("deny", "129.168.1.12");//黑名单
-        servletRegistrationBean.addInitParameter("loginUsername", "root");//用户名
-        servletRegistrationBean.addInitParameter("loginPassword", "wuyue930912");//密码
-        servletRegistrationBean.addInitParameter("resetEnable", "false");//是否可以重置数据源
+        servletRegistrationBean.addInitParameter("allow", "127.0.0.1");
+        servletRegistrationBean.addInitParameter("deny", "129.168.1.12");
+        servletRegistrationBean.addInitParameter("loginUsername", "root");
+        servletRegistrationBean.addInitParameter("loginPassword", "wuyue930912");
+        servletRegistrationBean.addInitParameter("resetEnable", "false");
         return servletRegistrationBean;
 
     }
 
-    @Bean    //监控
+    @Bean
     public FilterRegistrationBean<WebStatFilter> filterRegistrationBean() {
         FilterRegistrationBean<WebStatFilter> filterRegistrationBean = new FilterRegistrationBean<WebStatFilter>();
         filterRegistrationBean.setFilter(new WebStatFilter());
         filterRegistrationBean.addUrlPatterns("/*");//所有请求进行监控处理
-        filterRegistrationBean.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.css,/druid/*");//排除
+        filterRegistrationBean.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.css,/druid/*");
         return filterRegistrationBean;
     }
 

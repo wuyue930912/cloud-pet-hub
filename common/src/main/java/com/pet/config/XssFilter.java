@@ -19,7 +19,7 @@ public class XssFilter implements Filter {
 
     private static boolean IS_INCLUDE_RICH_TEXT = true;
 
-    public List<String> excludes = new ArrayList<>();
+    private List<String> excludes = new ArrayList<>();
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {

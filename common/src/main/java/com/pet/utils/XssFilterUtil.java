@@ -19,9 +19,6 @@ public class XssFilterUtil {
     private static final Document.OutputSettings outputSettings = new Document.OutputSettings().prettyPrint(false);
 
     static {
-        // 富文本编辑时一些样式是使用style来进行实现的
-        // 比如红色字体 style="color:red;"
-        // 所以需要给所有标签添加style属性
         whitelist.addAttributes(":all", "style");
     }
 
