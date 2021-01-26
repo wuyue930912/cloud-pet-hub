@@ -11,13 +11,11 @@ import javax.servlet.http.HttpServletRequestWrapper;
  * 重写请求参数处理函数
  */
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
-    HttpServletRequest orgRequest = null;
 
-    private boolean isIncludeRichText = false;
+    private boolean isIncludeRichText;
 
-    public XssHttpServletRequestWrapper(HttpServletRequest request, boolean isIncludeRichText) {
+    XssHttpServletRequestWrapper(HttpServletRequest request, boolean isIncludeRichText) {
         super(request);
-        orgRequest = request;
         this.isIncludeRichText = isIncludeRichText;
     }
 
@@ -64,27 +62,6 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
             value = XssFilterUtil.clean(value);
         }
         return value;
-    }
-
-    /**
-     * 获取最原始的request
-     *
-     * @return
-     */
-    public HttpServletRequest getOrgRequest() {
-        return orgRequest;
-    }
-
-    /**
-     * 获取最原始的request的静态方法
-     *
-     * @return
-     */
-    public static HttpServletRequest getOrgRequest(HttpServletRequest req) {
-        if (req instanceof XssHttpServletRequestWrapper) {
-            return ((XssHttpServletRequestWrapper) req).getOrgRequest();
-        }
-        return req;
     }
 
 }

@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 @Data
 @MappedSuperclass
-public class BaseEntity implements Serializable {
+class BaseEntity implements Serializable {
     private Timestamp createTime = new Timestamp(System.currentTimeMillis());
     private String createUser;
     private Timestamp modifyTime;

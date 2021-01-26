@@ -9,17 +9,17 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>base</module>
-        <module>common</module>
-        <module>applets</module>
+<!--        <module>base</module>-->
+<!--        <module>common</module>-->
+<!--        <module>applets</module>-->
         <module>maintain</module>
-        <module>app</module>
-        <module>web</module>
+<!--        <module>app</module>-->
+<!--        <module>web</module>-->
         <module>common</module>
     </modules>
 
     <properties>
-        <java.version>15</java.version>
+        <java.version>11</java.version>
     </properties>
 
     <parent>
