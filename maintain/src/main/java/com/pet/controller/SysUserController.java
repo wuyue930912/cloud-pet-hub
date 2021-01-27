@@ -1,5 +1,8 @@
 package com.pet.controller;
 
+import com.pet.annotation.LogController;
+import com.pet.annotation.TimeConsuming;
+import com.pet.constant.LogLevelConstant;
 import com.pet.entity.SysUser;
 import com.pet.service.SysUserService;
 import com.pet.vo.ResponseResult;
@@ -21,8 +24,11 @@ public class SysUserController {
 
     private final SysUserService service;
 
+    @TimeConsuming
+    @LogController(description = "创建后台用户", logLevel = LogLevelConstant.NOTICE, method = "/create")
     @PostMapping("/create")
-    public ResponseEntity<ResponseResult> createUser(@Valid @RequestBody SysUser sysUser){
+    public ResponseEntity<ResponseResult> createUser(@Valid @RequestBody SysUser sysUser) {
+        log.info("/back/user = start create back user : [{}]", sysUser.toString());
         return service.create(sysUser);
     }
 }
