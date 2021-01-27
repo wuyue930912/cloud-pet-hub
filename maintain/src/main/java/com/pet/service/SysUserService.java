@@ -18,12 +18,14 @@ import java.util.Optional;
 @Slf4j
 @AllArgsConstructor
 public class SysUserService {
+
     private final SysUserDao sysUserDao;
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<ResponseResult> create(SysUser sysUser) {
         Optional<SysUser> optional = sysUserDao.findByUserName(sysUser.getUserName());
         if (optional.isPresent()) {
+            log.info("/back/user = create back user error because : [{}]", ErrorMsgConstant.USER_ALREADY_EXIST);
             return new ResponseEntity<>(ResponseResult.builder()
                     .code(ErrorCodeConstant.USER_ALREADY_EXIST)
                     .msg(ErrorMsgConstant.USER_ALREADY_EXIST)
@@ -31,7 +33,7 @@ public class SysUserService {
         }
 
         SysUser saveUser = sysUserDao.save(sysUser);
-
+        log.info("/back/user = create back user success");
         return new ResponseEntity<>(ResponseResult.builder()
                 .code(ErrorCodeConstant.SUCCESS)
                 .msg(ErrorMsgConstant.SUCCESS)
