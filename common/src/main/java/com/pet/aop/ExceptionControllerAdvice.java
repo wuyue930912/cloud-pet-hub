@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
 
+/**
+ * 全局异常拦截，直接返回badRequest
+ */
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
