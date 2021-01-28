@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ResponseResult {
+public class ResponseResultVO {
     private long code;
     private String msg;
     private Object data;

@@ -1,4 +1,4 @@
-package com.pet.entity;
+package com.pet.po;
 
 import lombok.Data;
 

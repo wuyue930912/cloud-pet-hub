@@ -1,7 +1,7 @@
 package com.pet.aop;
 
 import com.pet.constant.ErrorCodeConstant;
-import com.pet.vo.ResponseResult;
+import com.pet.vo.ResponseResultVO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -18,7 +18,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity<ResponseResult> bindExceptionHandler(BindException exception) {
+    public ResponseEntity<ResponseResultVO> bindExceptionHandler(BindException exception) {
         exception.printStackTrace();
         BindingResult result = exception.getBindingResult();
         String errorMsg = null;
@@ -26,6 +26,6 @@ public class ExceptionControllerAdvice {
             Set<FieldError> fieldErrors = new HashSet<>(result.getFieldErrors());
             errorMsg = fieldErrors.iterator().next().getDefaultMessage();
         }
-        return ResponseEntity.badRequest().body(ResponseResult.builder().code(ErrorCodeConstant.VALID_ERROR).msg(errorMsg).build());
+        return ResponseEntity.badRequest().body(ResponseResultVO.builder().code(ErrorCodeConstant.VALID_ERROR).msg(errorMsg).build());
     }
 }

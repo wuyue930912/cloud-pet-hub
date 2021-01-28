@@ -2,7 +2,7 @@ package com.pet.aop;
 
 import com.pet.annotation.LogController;
 import com.pet.constant.HttpConstant;
-import com.pet.entity.SysUser;
+import com.pet.po.SysUser;
 import com.pet.event.LogToDbEvent;
 import com.pet.event.entity.LogToDbEventEntity;
 import lombok.extern.slf4j.Slf4j;

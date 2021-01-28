@@ -1,6 +1,6 @@
 package com.pet.dao;
 
-import com.pet.entity.SysUser;
+import com.pet.po.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
