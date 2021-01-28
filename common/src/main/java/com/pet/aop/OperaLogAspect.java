@@ -23,6 +23,9 @@ import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * 切面
+ */
 @Slf4j
 @Aspect
 @Component
@@ -39,6 +42,12 @@ public class OperaLogAspect {
     public void methodTimePoint() {
     }
 
+    /**
+     * 前置通知，进入具体方法前执行
+     *
+     * @param joinPoint 切点
+     * @param logController 自定义注解LogController
+     */
     @Before(value = "annotationPoint() && @annotation(logController)", argNames = "joinPoint, logController")
     public void beforeController(JoinPoint joinPoint, LogController logController) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
@@ -61,6 +70,12 @@ public class OperaLogAspect {
                         .build()));
     }
 
+    /**
+     * 环绕通知，统计方法执行时常
+     * TimeConsuming注解为切入点
+     *
+     * @param pjp 切点
+     */
     @Around(value = "methodTimePoint()")
     public Object apiTimeConsuming(ProceedingJoinPoint pjp) throws Throwable {
         long begin = System.currentTimeMillis();

@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 拦截请求，防止XSS攻击
+ */
 @Slf4j
 public class XssFilter implements Filter {
 
@@ -25,7 +28,7 @@ public class XssFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
-        if (handleExcludeURL(req, resp)) {
+        if (handleExcludeURL(req)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -33,7 +36,7 @@ public class XssFilter implements Filter {
         filterChain.doFilter(xssRequest, response);
     }
 
-    private boolean handleExcludeURL(HttpServletRequest request, HttpServletResponse response) {
+    private boolean handleExcludeURL(HttpServletRequest request) {
         if (excludes == null || excludes.isEmpty()) {
             return false;
         }

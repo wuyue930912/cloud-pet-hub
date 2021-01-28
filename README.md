@@ -8,6 +8,8 @@
  
  4、dto、vo、po转换通过mapstruct定义接口自动转换，不允许手写转换
  
+ 5、@Async注解禁止使用默认线程池
+
  ## 包说明
  
  1、annotation 自定义注解

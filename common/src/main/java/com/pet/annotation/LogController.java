@@ -4,6 +4,9 @@ import com.pet.constant.LogLevelConstant;
 
 import java.lang.annotation.*;
 
+/**
+ * 需要记录日志的方法上用这个注解
+ */
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
