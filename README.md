@@ -9,7 +9,14 @@
  4、dto、vo、po转换通过mapstruct定义接口自动转换，不允许手写转换
  
  5、@Async注解禁止使用默认线程池
+ 
+ 6、圈复杂度不能超过5
+ 
+ 7、不允许使用魔法数
 
+ 8、public方法必须加javadoc注释
+ 
+ 
  ## 包说明
  
  1、annotation 自定义注解
@@ -39,6 +46,8 @@
  13、controller 入口
  
  14、service 业务
+ 
+ 15、scheduling 定时器
  
  ##配置
  父pom配置profile指定要加载的application配置文件
