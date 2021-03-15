@@ -2,13 +2,13 @@ package com.pet.po;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.Id;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class SysUsers extends BaseEntity {
