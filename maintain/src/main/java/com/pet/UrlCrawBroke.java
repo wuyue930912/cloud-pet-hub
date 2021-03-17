@@ -1,10 +1,7 @@
 package com.pet;
 
-import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -12,9 +9,6 @@ import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*
- * 如果设置了自定义域名，将博客域名前缀填写入19行的变量userId中，点击运行
- */
 public class UrlCrawBroke {
 
     private static String userId = "weixin_38045214";
@@ -33,7 +27,7 @@ public class UrlCrawBroke {
             curUrl.append(i);
             System.out.println(curUrl);
             is = doGet(curUrl.toString());
-            pageStr = inputStreamToString(is);// 一整页的html源码
+            pageStr = inputStreamToString(is);
 
             List<String> list = getMatherSubstrs(pageStr);
             urlSet.addAll(list);
@@ -41,73 +35,21 @@ public class UrlCrawBroke {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) throws InterruptedException {
         csdn();
-
     }
-
-    private static void setNetWork() throws IOException {
-        String str1 = "192.168.85.2";
-        String str2 = "255.255.254.0";
-        String[] command1 = {"netsh", "interface", "ip", "set", "address",
-                "name=", "Local Area Connection", "source=static", "addr=", str1,
-                "mask=", str2};
-        Process pp = java.lang.Runtime.getRuntime().exec(command1);
-    }
-
-    private static String getWindowsMACAddress() throws SocketException {
-        String allipaddress = null;
-        ArrayList ar = new ArrayList();
-        Enumeration netInterfaces = NetworkInterface.getNetworkInterfaces();
-        while (netInterfaces.hasMoreElements()) {
-            NetworkInterface ni = (NetworkInterface) netInterfaces.nextElement();
-
-            Enumeration cardipaddress = ni.getInetAddresses();
-//          InetAddress ip = (InetAddress) cardipaddress.nextElement();
-//          System.out.println(ip.getHostAddress());
-            ar.add(ni.getName());
-//          if(!ip.getHostAddress().equalsIgnoreCase("127.0.0.1") )
-//            {    ar.add(ni.getName()+":");
-//                allipaddress=ip.getHostAddress();
-//                while(cardipaddress.hasMoreElements())
-//                 {
-//                     ip = (InetAddress) cardipaddress.nextElement();
-//                     allipaddress=allipaddress+" , "+ip.getHostAddress();
-//                 }
-//                 ar.add(allipaddress);
-//                 System.out.println(ip.getHostAddress());
-//                 System.out.println(allipaddress);
-//            }
-//          else
-//              continue;
-//
-
-        }
-        for (int i = 0; i < ar.size(); ) {
-            System.out.println(ar.get(i++));
-        }
-        return allipaddress;
-    }
-
 
     private static void csdn() throws InterruptedException {
         while (true) {
-//
-            // ----------------------------------------------遍历每一页 获取文章链接----------------------------------------------
-//            if (urlAll()) {
-//                return;
-//            }
-
-            urlSet.add("https://blog.csdn.net/weixin_38045214/article/details/114363996");
-            urlSet.add("https://blog.csdn.net/weixin_38045214/article/details/114133678");
-            // ---------------------------------------------------多线程访问每个链接---------------------------------------------------
+            if (urlAll()) {
+                return;
+            }
             ExecutorService executor = Executors.newCachedThreadPool();
-            int threadCount = 1; // 并发线程数量
+            int threadCount = 1;
             for (int i = 0; i < threadCount; i++) {
                 executor.execute(new MyThread(urlSet));
             }
             executor.shutdown();
-
             Thread.sleep(20000);
         }
     }
@@ -120,7 +62,6 @@ public class UrlCrawBroke {
             return true;
         }
 
-        // ---------------------------------------------------打印每个链接---------------------------------------------------
         System.out.println("打印每个链接");
         for (String s : urlSet) {
             System.out.println(s);
