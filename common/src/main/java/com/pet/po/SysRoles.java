@@ -13,13 +13,13 @@ import javax.persistence.Id;
 @Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class SysRoles extends BaseEntity{
+public class SysRoles extends BaseEntity {
 
-  @Id
-  @GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2")
-  private String roleId;
-  private String roleName;
-  private String roleDescribe;
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String roleId;
+    private String roleName;
+    private String roleDescribe;
 
 }

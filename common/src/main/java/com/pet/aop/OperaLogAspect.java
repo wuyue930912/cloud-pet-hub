@@ -5,6 +5,7 @@ import com.pet.constant.HttpConstant;
 import com.pet.event.LogToDbEvent;
 import com.pet.event.entity.LogToDbEventEntity;
 import com.pet.po.SysUsers;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -29,10 +29,10 @@ import java.util.Objects;
 @Slf4j
 @Aspect
 @Component
+@AllArgsConstructor
 public class OperaLogAspect {
 
-    @Resource
-    private ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher publisher;
 
     @Pointcut("@annotation(com.pet.annotation.LogController)")
     public void annotationPoint() {
@@ -45,7 +45,7 @@ public class OperaLogAspect {
     /**
      * 前置通知，进入具体方法前执行
      *
-     * @param joinPoint 切点
+     * @param joinPoint     切点
      * @param logController 自定义注解LogController
      */
     @Before(value = "annotationPoint() && @annotation(logController)", argNames = "joinPoint, logController")
