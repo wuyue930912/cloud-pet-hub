@@ -18,6 +18,7 @@ public class SysRights extends BaseEntity {
   @Id
   @GeneratedValue(generator = "uuid")
   @GenericGenerator(name = "uuid", strategy = "uuid2")
+
   private String rightsId;
   private String rightsName;
   private String rightsUrl;

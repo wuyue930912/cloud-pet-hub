@@ -11,9 +11,6 @@ import java.util.List;
 @Repository
 public interface SysUsersDao extends JpaRepository<SysUsers, String> {
 
-    @Query(value = "select userName from SysUsers  where userId = ?1")
-    String findByUserName(String userId);
-
     @Query(value = "select s from SysUsers s where s.userId = ?1")
     SysUsers findUsers(String userId);
 

@@ -1,12 +1,13 @@
 package com.pet.service;
 
+import com.pet.dao.SysUserRoleDao;
 import com.pet.dao.SysUsersDao;
 import com.pet.dto.SysUsersDTO;
+import com.pet.po.SysUserRole;
 import com.pet.po.SysUsers;
 import com.pet.utils.PasswordUtil;
 import com.pet.vo.SysUsersVo;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,6 +20,8 @@ import java.util.Optional;
 public class SysUsersService {
 
     private final SysUsersDao usersDao;
+
+    private final SysUserRoleDao userRoleDao;
 
     @Transactional
     public Optional<SysUsersDTO> createUser(SysUsersVo sysUsersVo) {
@@ -84,5 +87,22 @@ public class SysUsersService {
         usersDTO.setUserEmail(users.getUserEmail());
         usersDTO.setUserPhone(users.getUserPhone());
         return usersDTO;
+    }
+
+    public Optional<String> assignRolesToUsers(String userId, List<String> roleId) {
+        SysUsers users = usersDao.findUsers(userId);
+        if(users == null){
+            return Optional.empty();
+        }
+
+        roleId.forEach(rId -> {
+           SysUserRole userRole =  new SysUserRole();
+            userRole.setUserId(userId);
+            userRole.setRoleId(rId);
+            userRoleDao.save(userRole);
+        });
+
+        return Optional.of("success");
+
     }
 }
