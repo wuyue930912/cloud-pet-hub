@@ -1,18 +1,21 @@
 package com.pet.service;
 
+import com.pet.constant.ErrorCodeConstant;
+import com.pet.constant.ErrorMsgConstant;
 import com.pet.dao.SysUsersDao;
 import com.pet.dto.SysUsersDTO;
 import com.pet.po.SysUsers;
 import com.pet.utils.PasswordUtil;
+import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysUsersVo;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
@@ -21,12 +24,33 @@ public class SysUsersService {
     private final SysUsersDao usersDao;
 
     @Transactional
-    public Optional<SysUsersDTO> createUser(SysUsersVo sysUsersVo) {
+    public Optional<ResponseResultVO> createUser(SysUsersVo sysUsersVo) {
+        // 获取参数
         String userName = sysUsersVo.getUserName();
         String userPwd = sysUsersVo.getUserPwd();
+        String validPwd = sysUsersVo.getValidPwd();
         String userEmail = sysUsersVo.getUserEmail();
         String userPhone = sysUsersVo.getUserPhone();
 
+        // 重名校验
+        Optional<SysUsers> optional = usersDao.findByUserName(userName);
+        if (optional.isPresent()) {
+            return Optional.of(ResponseResultVO.builder()
+                    .data(optional.get().getUserName())
+                    .code(ErrorCodeConstant.VALID_ERROR)
+                    .msg(ErrorMsgConstant.USER_ALREADY_EXIST)
+                    .build());
+        }
+
+        // 密码校验
+        if (!validPwd.equals(userPwd)) {
+            return Optional.of(ResponseResultVO.builder()
+                    .code(ErrorCodeConstant.VALID_ERROR)
+                    .msg(ErrorMsgConstant.USER_VALID_PWD_USER_PWD_NOT_EQUALS)
+                    .build());
+        }
+
+        // 保存数据库
         SysUsers users = new SysUsers();
         users.setUserName(userName);
         users.setUserEmail(userEmail);
@@ -34,13 +58,19 @@ public class SysUsersService {
         users.setUserPhone(userPhone);
         usersDao.save(users);
 
+        // 构造返回结果
         SysUsersDTO usersDTO = new SysUsersDTO();
         usersDTO.setUserName(userName);
         usersDTO.setUserPwd(userPwd);
         usersDTO.setUserEmail(userEmail);
         usersDTO.setUserPhone(userPhone);
 
-        return Optional.of(usersDTO);
+        // 构造结果集
+        return Optional.of(ResponseResultVO.builder()
+                .data(usersDTO)
+                .code(ErrorCodeConstant.SUCCESS)
+                .msg(ErrorMsgConstant.SUCCESS)
+                .build());
     }
 
     @Transactional

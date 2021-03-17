@@ -5,6 +5,6 @@ public class ErrorCodeConstant {
     }
 
     public final static Long SUCCESS = 0x01L;
-    public final static Long USER_ALREADY_EXIST = 0x02L;
     public final static Long VALID_ERROR = 0x03L;
+    public final static Long SYSTEM_ERROR = 0x99L;
 }
