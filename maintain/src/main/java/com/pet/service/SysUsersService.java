@@ -2,8 +2,10 @@ package com.pet.service;
 
 import com.pet.constant.ErrorCodeConstant;
 import com.pet.constant.ErrorMsgConstant;
+import com.pet.dao.SysUserRoleDao;
 import com.pet.dao.SysUsersDao;
 import com.pet.dto.SysUsersDTO;
+import com.pet.po.SysUserRole;
 import com.pet.po.SysUsers;
 import com.pet.utils.PasswordUtil;
 import com.pet.vo.ResponseResultVO;
@@ -15,13 +17,14 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
 public class SysUsersService {
 
     private final SysUsersDao usersDao;
+
+    private final SysUserRoleDao userRoleDao;
 
     @Transactional
     public Optional<ResponseResultVO> createUser(SysUsersVo sysUsersVo) {
@@ -58,7 +61,6 @@ public class SysUsersService {
         users.setUserPhone(userPhone);
         usersDao.save(users);
 
-        // 构造返回结果
         SysUsersDTO usersDTO = new SysUsersDTO();
         usersDTO.setUserName(userName);
         usersDTO.setUserPwd(userPwd);
@@ -98,8 +100,8 @@ public class SysUsersService {
 
     public SysUsersDTO editsUser(SysUsersVo sysUsersVo) {
         SysUsersDTO usersDTO = new SysUsersDTO();
-        String UserId = sysUsersVo.getUserId();
-        SysUsers users = usersDao.findUsers(UserId);
+        String userId = sysUsersVo.getUserId();
+        SysUsers users = usersDao.findUsers(userId);
         if (users == null) {
             return null;
         }
@@ -114,5 +116,22 @@ public class SysUsersService {
         usersDTO.setUserEmail(users.getUserEmail());
         usersDTO.setUserPhone(users.getUserPhone());
         return usersDTO;
+    }
+
+    public Optional<String> assignRolesToUsers(String userId, List<String> roleId) {
+        SysUsers users = usersDao.findUsers(userId);
+        if(users == null){
+            return Optional.empty();
+        }
+
+        roleId.forEach(rId -> {
+           SysUserRole userRole =  new SysUserRole();
+            userRole.setUserId(userId);
+            userRole.setRoleId(rId);
+            userRoleDao.save(userRole);
+        });
+
+        return Optional.of("success");
+
     }
 }

@@ -4,7 +4,6 @@ import com.pet.annotation.LogController;
 import com.pet.annotation.TimeConsuming;
 import com.pet.constant.ErrorCodeConstant;
 import com.pet.constant.ErrorMsgConstant;
-import com.pet.dto.SysUsersDTO;
 import com.pet.service.SysUsersService;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysUsersVo;
@@ -20,6 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 基础接口（全都要考虑到权限）
+ * 1.创建用户（用户名（判重）/密码（加密）/手机号（正则校验）/邮箱（校验））
+ * 2.修改用户（参考创建用户）/（修改是可以拓展增加一些不必要条件进去）
+ * 3.删除用户（删除单个/多个,逻辑删除isDelete=true）
+ * 4.查询用户（查询单个/多个）
+ */
 @Slf4j
 @RestController
 @RequestMapping("/sysUsers")
@@ -66,7 +72,7 @@ public class SysUsersController {
 
 
     @PostMapping("/findUsers")
-    @LogController(description = "修改用户", method = "/findUsers")
+    @LogController(description = "查询用户", method = "/findUsers")
     @TimeConsuming
     public ResponseResultVO findUsers(@RequestBody List<String> userId) {
         log.info("UserManager = start find userId [{}] ", userId);
@@ -74,6 +80,21 @@ public class SysUsersController {
                 .data(usersService.findUsers(userId))
                 .code(ErrorCodeConstant.SUCCESS)
                 .msg("用户查询成功")
+                .build();
+    }
+
+    //给用户分配角色
+    @PostMapping("/assignRolesToUsers")
+    @LogController(description = "给用户分配角色", method = "/assignRolesToUsers")
+    @TimeConsuming
+    public ResponseResultVO assignRolesToUsers(@RequestBody SysUsersVo sysUsersVo) {
+        String userId = sysUsersVo.getUserId();
+        List<String> roleId = sysUsersVo.getRoleId();
+        log.info("UserManager = start assignRolesToUsers userId [{}] roleId [{}]", userId,roleId);
+        return ResponseResultVO.builder()
+                .data(usersService.assignRolesToUsers(userId,roleId))
+                .code(ErrorCodeConstant.SUCCESS)
+                .msg("用户分配角色成功")
                 .build();
     }
 }

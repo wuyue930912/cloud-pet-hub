@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Data
 public class SysUsersVo {
@@ -21,4 +22,7 @@ public class SysUsersVo {
     private String validPwd;
     private String userPhone;
     private String userEmail;
+
+    //用于给用户分配角色
+    private List<String> roleId;
 }

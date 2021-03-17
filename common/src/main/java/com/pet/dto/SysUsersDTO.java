@@ -13,8 +13,6 @@ public class SysUsersDTO {
     private String userPhone;
     private String userEmail;
 
-    //被删除的用户们
-    private List<String> userNames;
     //查询的用户们
     private List<SysUsers> sysUserList;
 }

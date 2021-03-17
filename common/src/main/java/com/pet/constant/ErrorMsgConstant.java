@@ -44,5 +44,9 @@ public class ErrorMsgConstant {
      * 角色不能为空
      */
     public static final String ROLE_NAME_NOT_NULL  = "角色不能为空";
+    /**
+     * 权限名称不能为空
+     */
+    public static final String RIGHTS_NAME_NOT_NULL  = "权限名称不能为空";
 
 }
