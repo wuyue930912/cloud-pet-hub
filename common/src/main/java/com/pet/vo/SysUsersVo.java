@@ -17,6 +17,9 @@ public class SysUsersVo {
     @NotEmpty(message = ErrorMsgConstant.USER_PWD_NOT_NULL)
     @Pattern(regexp = RegConstant.PWD_REG, message = ErrorMsgConstant.USER_PWD_NOT_MATCH)
     private String userPwd;
+    @NotEmpty(message = ErrorMsgConstant.USER_VALID_PWD_NOT_NULL)
+    @Pattern(regexp = RegConstant.PWD_REG, message = ErrorMsgConstant.USER_VALID_PWD_NOT_MATCH)
+    private String validPwd;
     private String userPhone;
     private String userEmail;
 

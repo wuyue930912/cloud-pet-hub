@@ -14,14 +14,11 @@ import javax.persistence.Id;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class SysRights extends BaseEntity {
-
-  @Id
-  @GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2")
-
-  private String rightsId;
-  private String rightsName;
-  private String rightsUrl;
-  private String rightsIcon;
-
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String rightsId;
+    private String rightsName;
+    private String rightsUrl;
+    private String rightsIcon;
 }

@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class SysRolesDTO {
-
     private String roleName;
     private String roleDescribe;
 

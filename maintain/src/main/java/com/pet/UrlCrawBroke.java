@@ -1,19 +1,16 @@
-package com.pet.controller;
+package com.pet;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/*
- * 如果设置了自定义域名，将博客域名前缀填写入19行的变量userId中，点击运行
- */
 public class UrlCrawBroke {
+
     private static String userId = "weixin_38045214";
     private static final String homeUrl = "https://blog.csdn.net/" + userId + "/article/list/";
     private static Set<String> urlSet = new HashSet<>();
@@ -22,7 +19,7 @@ public class UrlCrawBroke {
         InputStream is;
         String pageStr;
         StringBuilder curUrl;
-        int maxPages = 20;
+        int maxPages = 10;
         for (int i = 1; i < maxPages; i++) {
             Thread.sleep(500);
             System.out.println("正在查找第 " + i + " 页中的博客地址");
@@ -30,7 +27,7 @@ public class UrlCrawBroke {
             curUrl.append(i);
             System.out.println(curUrl);
             is = doGet(curUrl.toString());
-            pageStr = inputStreamToString(is);// 一整页的html源码
+            pageStr = inputStreamToString(is);
 
             List<String> list = getMatherSubstrs(pageStr);
             urlSet.addAll(list);
@@ -44,39 +41,48 @@ public class UrlCrawBroke {
 
     private static void csdn() throws InterruptedException {
         while (true) {
-
-            // ----------------------------------------------遍历每一页 获取文章链接----------------------------------------------
-            try {
-                getUrls();
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
+            if (urlAll()) {
                 return;
             }
-
-            // ---------------------------------------------------打印每个链接---------------------------------------------------
-            System.out.println("打印每个链接");
-            for (String s : urlSet) {
-                System.out.println(s);
-            }
-            System.out.println("打印每个链接完毕");
-
-            // ---------------------------------------------------多线程访问每个链接---------------------------------------------------
             ExecutorService executor = Executors.newCachedThreadPool();
-            int threadCount = 5; // 并发线程数量
+            int threadCount = 1;
             for (int i = 0; i < threadCount; i++) {
                 executor.execute(new MyThread(urlSet));
             }
             executor.shutdown();
-
-            Thread.sleep(50000);
+            Thread.sleep(20000);
         }
+    }
+
+    private static boolean urlAll() {
+        try {
+            getUrls();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return true;
+        }
+
+        System.out.println("打印每个链接");
+        for (String s : urlSet) {
+            System.out.println(s);
+        }
+        System.out.println("打印每个链接完毕");
+        return false;
     }
 
     private static InputStream doGet(String urlstr) throws IOException {
         URL url = new URL(urlstr);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestProperty("User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+        int i = (int) (Math.random() * 100);
+        System.err.println(i);
+        if (i % 2 == 0) {
+            conn.setRequestProperty("User-Agent",
+                    "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+        } else {
+            conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0)");
+        }
+
+
         return conn.getInputStream();
     }
 
@@ -100,6 +106,8 @@ public class UrlCrawBroke {
         }
         return list;
     }
+
+
 }
 
 class MyThread implements Runnable {

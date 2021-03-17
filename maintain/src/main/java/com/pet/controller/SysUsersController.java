@@ -3,12 +3,15 @@ package com.pet.controller;
 import com.pet.annotation.LogController;
 import com.pet.annotation.TimeConsuming;
 import com.pet.constant.ErrorCodeConstant;
+import com.pet.constant.ErrorMsgConstant;
 import com.pet.dto.SysUsersDTO;
 import com.pet.service.SysUsersService;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysUsersVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,13 +38,13 @@ public class SysUsersController {
     @PostMapping("/createUser")
     @LogController(description = "创建用户", method = "/createUser")
     @TimeConsuming
-    public ResponseResultVO createUser(@Valid @RequestBody SysUsersVo sysUsersVo) {
+    public ResponseEntity<ResponseResultVO> createUser(@Valid @RequestBody SysUsersVo sysUsersVo) {
         log.info("UserManager = start create user [{}] pwd [{}]", sysUsersVo.getUserName(), sysUsersVo.getUserPwd());
-        return ResponseResultVO.builder()
-                .data(usersService.createUser(sysUsersVo).orElse(new SysUsersDTO()))
-                .code(ErrorCodeConstant.SUCCESS)
-                .msg("用户创建成功")
-                .build();
+
+        return ResponseEntity.ok(usersService.createUser(sysUsersVo).orElse(ResponseResultVO.builder()
+                .code(ErrorCodeConstant.SYSTEM_ERROR)
+                .msg(ErrorMsgConstant.SYSTEM_ERROR)
+                .build()));
     }
 
     @PostMapping("/deleteUsers")

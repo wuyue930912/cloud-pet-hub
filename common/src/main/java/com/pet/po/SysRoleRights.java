@@ -10,13 +10,10 @@ import javax.persistence.Id;
 @Data
 @Entity
 public class SysRoleRights {
-
-  @Id
-  @GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2")
-  private String id;
-  private String roleId;
-  private String rightsId;
-
-
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String id;
+    private String roleId;
+    private String rightsId;
 }
