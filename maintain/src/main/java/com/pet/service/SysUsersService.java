@@ -100,8 +100,8 @@ public class SysUsersService {
 
     public SysUsersDTO editsUser(SysUsersVo sysUsersVo) {
         SysUsersDTO usersDTO = new SysUsersDTO();
-        String UserId = sysUsersVo.getUserId();
-        SysUsers users = usersDao.findUsers(UserId);
+        String userId = sysUsersVo.getUserId();
+        SysUsers users = usersDao.findUsers(userId);
         if (users == null) {
             return null;
         }

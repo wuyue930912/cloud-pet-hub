@@ -4,7 +4,6 @@ import com.pet.annotation.LogController;
 import com.pet.annotation.TimeConsuming;
 import com.pet.constant.ErrorCodeConstant;
 import com.pet.constant.ErrorMsgConstant;
-import com.pet.dto.SysUsersDTO;
 import com.pet.service.SysUsersService;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysUsersVo;

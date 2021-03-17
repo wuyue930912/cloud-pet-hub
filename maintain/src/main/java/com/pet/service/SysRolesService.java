@@ -3,7 +3,6 @@ package com.pet.service;
 import com.pet.dao.SysRoleRightsDao;
 import com.pet.dao.SysRolesDao;
 import com.pet.dto.SysRolesDTO;
-import com.pet.dto.SysUsersDTO;
 import com.pet.po.SysRoleRights;
 import com.pet.po.SysRoles;
 import com.pet.vo.SysRoleVo;
