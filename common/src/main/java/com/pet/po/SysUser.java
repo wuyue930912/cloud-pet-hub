@@ -1,9 +1,7 @@
 package com.pet.po;
 
 import com.pet.constant.RegConstant;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -21,7 +19,7 @@ public class SysUser extends BaseEntity {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    private String userId;
 
     @NotEmpty(message = "请输入用户名")
     @Column(length = 64)

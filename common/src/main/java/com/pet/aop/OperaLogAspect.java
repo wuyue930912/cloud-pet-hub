@@ -56,13 +56,13 @@ public class OperaLogAspect {
         String realMethodName = joinPoint.getSignature().getName();
 
         log.info("Aspect = [{}] ,user [{}] , method [{}] , logLevel [{}] , do [{}] , realMethod [{}]",
-                new Date(), user.getUserName(), logController.method(), logController.logLevel(), logController.description(), realMethodName);
+                new Date(), user == null ? "system" : user.getUserName(), logController.method(), logController.logLevel(), logController.description(), realMethodName);
 
         // 异步处理日志
         publisher.publishEvent(new LogToDbEvent(
                 LogToDbEventEntity.builder()
                         .date(new Date())
-                        .userName(user.getUserName())
+                        .userName(user == null ? "system" : user.getUserName())
                         .method(logController.method())
                         .logLevel(logController.logLevel())
                         .description(logController.description())
