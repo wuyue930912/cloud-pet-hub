@@ -3,13 +3,12 @@ package com.pet.controller;
 import com.pet.annotation.LogController;
 import com.pet.annotation.TimeConsuming;
 import com.pet.constant.ErrorCodeConstant;
-import com.pet.constant.ErrorMsgConstant;
 import com.pet.service.SysUsersService;
+import com.pet.utils.ControllerUtil;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysUsersVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,23 +38,15 @@ public class SysUsersController {
     @TimeConsuming
     public ResponseEntity<ResponseResultVO> createUser(@Valid @RequestBody SysUsersVo sysUsersVo) {
         log.info("UserManager = start create user [{}] pwd [{}]", sysUsersVo.getUserName(), sysUsersVo.getUserPwd());
-
-        return ResponseEntity.ok(usersService.createUser(sysUsersVo).orElse(ResponseResultVO.builder()
-                .code(ErrorCodeConstant.SYSTEM_ERROR)
-                .msg(ErrorMsgConstant.SYSTEM_ERROR)
-                .build()));
+        return ResponseEntity.ok(usersService.createUser(sysUsersVo).orElseGet(ControllerUtil::getErrorResultVO));
     }
 
     @PostMapping("/deleteUsers")
     @LogController(description = "删除用户", method = "/deleteUsers")
     @TimeConsuming
-    public ResponseResultVO deleteUsers(@RequestBody List<String> userId) {
+    public ResponseEntity<ResponseResultVO> deleteUsers(@RequestBody List<String> userId) {
         log.info("UserManager = start delete userIdLists [{}] ", userId);
-        return ResponseResultVO.builder()
-                .data(usersService.deleteUsers(userId).orElse("error"))
-                .code(ErrorCodeConstant.SUCCESS)
-                .msg("用户删除成功")
-                .build();
+        return ResponseEntity.ok(usersService.deleteUsers(userId).orElseGet(ControllerUtil::getErrorResultVO));
     }
 
     @PostMapping("/editsUser")
@@ -90,9 +81,9 @@ public class SysUsersController {
     public ResponseResultVO assignRolesToUsers(@RequestBody SysUsersVo sysUsersVo) {
         String userId = sysUsersVo.getUserId();
         List<String> roleId = sysUsersVo.getRoleId();
-        log.info("UserManager = start assignRolesToUsers userId [{}] roleId [{}]", userId,roleId);
+        log.info("UserManager = start assignRolesToUsers userId [{}] roleId [{}]", userId, roleId);
         return ResponseResultVO.builder()
-                .data(usersService.assignRolesToUsers(userId,roleId))
+                .data(usersService.assignRolesToUsers(userId, roleId))
                 .code(ErrorCodeConstant.SUCCESS)
                 .msg("用户分配角色成功")
                 .build();

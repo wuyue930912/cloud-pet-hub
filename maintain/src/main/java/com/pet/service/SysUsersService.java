@@ -7,6 +7,7 @@ import com.pet.dao.SysUsersDao;
 import com.pet.dto.SysUsersDTO;
 import com.pet.po.SysUserRole;
 import com.pet.po.SysUsers;
+import com.pet.utils.ControllerUtil;
 import com.pet.utils.PasswordUtil;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysUsersVo;
@@ -38,19 +39,12 @@ public class SysUsersService {
         // 重名校验
         Optional<SysUsers> optional = usersDao.findByUserName(userName);
         if (optional.isPresent()) {
-            return Optional.of(ResponseResultVO.builder()
-                    .data(optional.get().getUserName())
-                    .code(ErrorCodeConstant.VALID_ERROR)
-                    .msg(ErrorMsgConstant.USER_ALREADY_EXIST)
-                    .build());
+            return Optional.of(ControllerUtil.getErrorResultVO(ErrorCodeConstant.VALID_ERROR, ErrorMsgConstant.USER_ALREADY_EXIST, optional.get().getUserName()));
         }
 
         // 密码校验
         if (!validPwd.equals(userPwd)) {
-            return Optional.of(ResponseResultVO.builder()
-                    .code(ErrorCodeConstant.VALID_ERROR)
-                    .msg(ErrorMsgConstant.USER_VALID_PWD_USER_PWD_NOT_EQUALS)
-                    .build());
+            return Optional.of(ControllerUtil.getErrorResultVO(ErrorCodeConstant.VALID_ERROR, ErrorMsgConstant.USER_VALID_PWD_USER_PWD_NOT_EQUALS));
         }
 
         // 保存数据库
@@ -68,18 +62,14 @@ public class SysUsersService {
         usersDTO.setUserPhone(userPhone);
 
         // 构造结果集
-        return Optional.of(ResponseResultVO.builder()
-                .data(usersDTO)
-                .code(ErrorCodeConstant.SUCCESS)
-                .msg(ErrorMsgConstant.SUCCESS)
-                .build());
+        return Optional.of(ControllerUtil.getSuccessResultVO(usersDTO));
     }
 
     @Transactional
-    public Optional<String> deleteUsers(List<String> userId) {
+    public Optional<ResponseResultVO> deleteUsers(List<String> userId) {
         try {
             usersDao.deleteIn(userId);
-            return Optional.of("success");
+            return Optional.of(ControllerUtil.getSuccessResultVO());
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -120,12 +110,12 @@ public class SysUsersService {
 
     public Optional<String> assignRolesToUsers(String userId, List<String> roleId) {
         SysUsers users = usersDao.findUsers(userId);
-        if(users == null){
+        if (users == null) {
             return Optional.empty();
         }
 
         roleId.forEach(rId -> {
-           SysUserRole userRole =  new SysUserRole();
+            SysUserRole userRole = new SysUserRole();
             userRole.setUserId(userId);
             userRole.setRoleId(rId);
             userRoleDao.save(userRole);
