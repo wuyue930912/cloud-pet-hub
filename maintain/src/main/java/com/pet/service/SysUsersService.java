@@ -2,6 +2,7 @@ package com.pet.service;
 
 import com.pet.constant.ErrorCodeConstant;
 import com.pet.constant.ErrorMsgConstant;
+import com.pet.convert.UsersConvert;
 import com.pet.dao.SysUserRoleDao;
 import com.pet.dao.SysUsersDao;
 import com.pet.dto.SysUsersDTO;
@@ -15,7 +16,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +33,6 @@ public class SysUsersService {
         String userName = sysUsersVo.getUserName();
         String userPwd = sysUsersVo.getUserPwd();
         String validPwd = sysUsersVo.getValidPwd();
-        String userEmail = sysUsersVo.getUserEmail();
-        String userPhone = sysUsersVo.getUserPhone();
 
         // 重名校验
         Optional<SysUsers> optional = usersDao.findByUserName(userName);
@@ -47,28 +45,21 @@ public class SysUsersService {
             return Optional.of(ControllerUtil.getErrorResultVO(ErrorCodeConstant.VALID_ERROR, ErrorMsgConstant.USER_VALID_PWD_USER_PWD_NOT_EQUALS));
         }
 
-        // 保存数据库
-        SysUsers users = new SysUsers();
-        users.setUserName(userName);
-        users.setUserEmail(userEmail);
-        users.setUserPwd(PasswordUtil.encodePassword(userPwd));
-        users.setUserPhone(userPhone);
-        usersDao.save(users);
+        SysUsers sysUsers = UsersConvert.INSTANCE.vo2po(sysUsersVo);
+        sysUsers.setUserPwd(PasswordUtil.encodePassword(userPwd));
 
-        SysUsersDTO usersDTO = new SysUsersDTO();
-        usersDTO.setUserName(userName);
-        usersDTO.setUserPwd(userPwd);
-        usersDTO.setUserEmail(userEmail);
-        usersDTO.setUserPhone(userPhone);
+        // 保存数据库
+        SysUsers saveUser = usersDao.save(sysUsers);
 
         // 构造结果集
-        return Optional.of(ControllerUtil.getSuccessResultVO(usersDTO));
+        return Optional.of(ControllerUtil.getSuccessResultVO(UsersConvert.INSTANCE.po2dto(saveUser)));
     }
 
     @Transactional
     public Optional<ResponseResultVO> deleteUsers(List<String> userId) {
         try {
-            usersDao.deleteIn(userId);
+            //修改为逻辑删除
+            userId.forEach(usersDao::logicDelete);
             return Optional.of(ControllerUtil.getSuccessResultVO());
         } catch (Exception e) {
             return Optional.empty();
@@ -76,46 +67,59 @@ public class SysUsersService {
     }
 
 
-    public SysUsersDTO findUsers(List<String> userId) {
+    public SysUsersDTO findUsers(String userId, int pageIndex, int pageSize) {
         SysUsersDTO usersDTO = new SysUsersDTO();
-        List<SysUsers> usersList = new ArrayList<>();
-        for (String uId : userId) {
-            SysUsers sysUsers = usersDao.findUsers(uId);
-            usersList.add(sysUsers);
+        if (userId == null || userId.equals("")) {
+            usersDTO.setSysUserList(usersDao.findAllUsers(pageIndex, pageSize));
+        } else {
+            SysUsers sysUsers = usersDao.findUsers(userId);
+            usersDTO = UsersConvert.INSTANCE.po2dto(sysUsers);
         }
-        usersDTO.setSysUserList(usersList);
         return usersDTO;
 
     }
 
-    public SysUsersDTO editsUser(SysUsersVo sysUsersVo) {
-        SysUsersDTO usersDTO = new SysUsersDTO();
+    public Optional<ResponseResultVO> editsUser(SysUsersVo sysUsersVo) {
         String userId = sysUsersVo.getUserId();
-        SysUsers users = usersDao.findUsers(userId);
-        if (users == null) {
-            return null;
-        }
-        users.setUserName(sysUsersVo.getUserName());
-        users.setUserPwd(sysUsersVo.getUserPwd());
-        users.setUserPhone(sysUsersVo.getUserPhone());
-        users.setUserEmail(sysUsersVo.getUserEmail());
-        usersDao.save(users);
-
-        usersDTO.setUserName(users.getUserName());
-        usersDTO.setUserPwd(users.getUserPwd());
-        usersDTO.setUserEmail(users.getUserEmail());
-        usersDTO.setUserPhone(users.getUserPhone());
-        return usersDTO;
-    }
-
-    public Optional<String> assignRolesToUsers(String userId, List<String> roleId) {
         SysUsers users = usersDao.findUsers(userId);
         if (users == null) {
             return Optional.empty();
         }
+        // 重名校验(此次要修改的名字判断是否重复了，需排除自身)
+        Optional<SysUsers> optional = usersDao.findByUserName(sysUsersVo.getUserName());
+        if (optional.isPresent()) {
+            return Optional.of(ResponseResultVO.builder()
+                    .data(optional.get().getUserName())
+                    .code(ErrorCodeConstant.VALID_ERROR)
+                    .msg(ErrorMsgConstant.USER_ALREADY_EXIST)
+                    .build());
+        }
+        String userPwd = sysUsersVo.getUserPwd();
+        SysUsers editUsers = UsersConvert.INSTANCE.vo2po(sysUsersVo);
+        editUsers.setUserPwd(PasswordUtil.encodePassword(userPwd));
+        //保存修改后的用户
+        SysUsers editUser = usersDao.save(editUsers);
 
+        // 构造结果集
+        return Optional.of(ResponseResultVO.builder()
+                .data(UsersConvert.INSTANCE.po2dto(editUser))
+                .code(ErrorCodeConstant.SUCCESS)
+                .msg(ErrorMsgConstant.SUCCESS)
+                .build());
+    }
+
+    public Optional<String> assignRolesToUsers(String userId, List<String> roleId) {
+        SysUsers users = usersDao.findUsers(userId);
+        if(users == null){
+            return Optional.empty();
+        }
+        //忽略了重复赋予角色
+        List<SysUserRole> userRoleList = userRoleDao.findUserIsRoleId(userId,roleId);
+        if(!userRoleList.isEmpty()){
+            return Optional.of("该用户已经有此角色,请重新分配");
+        }
         roleId.forEach(rId -> {
-            SysUserRole userRole = new SysUserRole();
+           SysUserRole userRole =  new SysUserRole();
             userRole.setUserId(userId);
             userRole.setRoleId(rId);
             userRoleDao.save(userRole);

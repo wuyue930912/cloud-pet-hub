@@ -21,7 +21,7 @@ public class XssFilter implements Filter {
 
     private static boolean IS_INCLUDE_RICH_TEXT = true;
 
-    private List<String> excludes = new ArrayList<>();
+    private final List<String> excludes = new ArrayList<>();
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
@@ -35,7 +35,7 @@ public class XssFilter implements Filter {
     }
 
     private boolean handleExcludeURL(HttpServletRequest request) {
-        if (excludes == null || excludes.isEmpty()) {
+        if (excludes.isEmpty()) {
             return false;
         }
         String url = request.getServletPath();

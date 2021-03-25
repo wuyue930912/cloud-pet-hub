@@ -13,9 +13,9 @@ public class ErrorMsgConstant {
      */
     public static final String SYSTEM_ERROR = "系统异常";
     /**
-     * 用户已存在
+     * 用户名称已被占用
      */
-    public static final String USER_ALREADY_EXIST = "用户已存在";
+    public static final String USER_ALREADY_EXIST = "用户名称已被占用";
     /**
      * 用户不能为空
      */
@@ -43,10 +43,17 @@ public class ErrorMsgConstant {
     /**
      * 角色不能为空
      */
-    public static final String ROLE_NAME_NOT_NULL  = "角色不能为空";
+    public static final String ROLE_NAME_NOT_NULL  = "角色名称不能为空";
     /**
      * 权限名称不能为空
      */
     public static final String RIGHTS_NAME_NOT_NULL  = "权限名称不能为空";
-
+    /**
+     * 角色名称已被占用
+     */
+    public static final String ROLE_ALREADY_EXIST = "角色名称已被占用";
+    /**
+     * 角色名称修改前后一致
+     */
+    public static final String ROLE_NAME_MODIFY_CONSISTENT = "角色名称修改前后一致";
 }

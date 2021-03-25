@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SysRightsDao extends JpaRepository<SysRights,String> {
@@ -18,4 +19,9 @@ public interface SysRightsDao extends JpaRepository<SysRights,String> {
 
     @Query(value = "select r from SysRights r where r.rightsId = ?1")
     SysRights findRights(String rId);
+
+    Optional<SysRights> findByRightsName(String rightsName);
+
+    @Query(value = "select * from sys_rights  limit ?1 , ?2",nativeQuery = true)
+    List<SysRights> findAllRights(int pageIndex, int pageSize);
 }
