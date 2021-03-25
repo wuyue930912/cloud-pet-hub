@@ -8,6 +8,7 @@ import com.pet.dao.SysUsersDao;
 import com.pet.dto.SysUsersDTO;
 import com.pet.po.SysUserRole;
 import com.pet.po.SysUsers;
+import com.pet.utils.ControllerUtil;
 import com.pet.utils.PasswordUtil;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysUsersVo;
@@ -36,19 +37,12 @@ public class SysUsersService {
         // 重名校验
         Optional<SysUsers> optional = usersDao.findByUserName(userName);
         if (optional.isPresent()) {
-            return Optional.of(ResponseResultVO.builder()
-                    .data(optional.get().getUserName())
-                    .code(ErrorCodeConstant.VALID_ERROR)
-                    .msg(ErrorMsgConstant.USER_ALREADY_EXIST)
-                    .build());
+            return Optional.of(ControllerUtil.getErrorResultVO(ErrorCodeConstant.VALID_ERROR, ErrorMsgConstant.USER_ALREADY_EXIST, optional.get().getUserName()));
         }
 
         // 密码校验
         if (!validPwd.equals(userPwd)) {
-            return Optional.of(ResponseResultVO.builder()
-                    .code(ErrorCodeConstant.VALID_ERROR)
-                    .msg(ErrorMsgConstant.USER_VALID_PWD_USER_PWD_NOT_EQUALS)
-                    .build());
+            return Optional.of(ControllerUtil.getErrorResultVO(ErrorCodeConstant.VALID_ERROR, ErrorMsgConstant.USER_VALID_PWD_USER_PWD_NOT_EQUALS));
         }
 
         SysUsers sysUsers = UsersConvert.INSTANCE.vo2po(sysUsersVo);
@@ -58,19 +52,15 @@ public class SysUsersService {
         SysUsers saveUser = usersDao.save(sysUsers);
 
         // 构造结果集
-        return Optional.of(ResponseResultVO.builder()
-                .data(UsersConvert.INSTANCE.po2dto(saveUser))
-                .code(ErrorCodeConstant.SUCCESS)
-                .msg(ErrorMsgConstant.SUCCESS)
-                .build());
+        return Optional.of(ControllerUtil.getSuccessResultVO(UsersConvert.INSTANCE.po2dto(saveUser)));
     }
 
     @Transactional
-    public Optional<String> deleteUsers(List<String> userId) {
+    public Optional<ResponseResultVO> deleteUsers(List<String> userId) {
         try {
             //修改为逻辑删除
             userId.forEach(usersDao::logicDelete);
-            return Optional.of("success");
+            return Optional.of(ControllerUtil.getSuccessResultVO());
         } catch (Exception e) {
             return Optional.empty();
         }
