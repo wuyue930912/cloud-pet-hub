@@ -1,6 +1,6 @@
 package com.pet.utils;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import cn.hutool.crypto.digest.BCrypt;
 
 public class PasswordUtil {
     private PasswordUtil(){

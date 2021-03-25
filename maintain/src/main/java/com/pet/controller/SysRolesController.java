@@ -3,16 +3,14 @@ package com.pet.controller;
 import com.pet.annotation.LogController;
 import com.pet.annotation.TimeConsuming;
 import com.pet.constant.ErrorCodeConstant;
-import com.pet.dto.SysRolesDTO;
+import com.pet.constant.ErrorMsgConstant;
 import com.pet.service.SysRolesService;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysRoleVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -35,14 +33,13 @@ public class SysRolesController {
     @PostMapping("/createRoles")
     @LogController(description = "创建角色", method = "/createRoles")
     @TimeConsuming
-    public ResponseResultVO createRoles(@Valid @RequestBody SysRoleVo sysRoleVo) {
+    public ResponseEntity<ResponseResultVO> createRoles(@Valid @RequestBody SysRoleVo sysRoleVo) {
         log.info("roleManager = start create role [{}] ,roleDescribe [{}]", sysRoleVo.getRoleName(),sysRoleVo.getRoleDescribe());
 
-        return ResponseResultVO.builder()
-                .data(rolesService.createRoles(sysRoleVo).orElse(new SysRolesDTO()))
-                .code(ErrorCodeConstant.SUCCESS)
-                .msg("角色创建成功")
-                .build();
+        return ResponseEntity.ok(rolesService.createRoles(sysRoleVo).orElse(ResponseResultVO.builder()
+                .code(ErrorCodeConstant.SYSTEM_ERROR)
+                .msg(ErrorMsgConstant.SYSTEM_ERROR)
+                .build()));
     }
 
     @PostMapping("/deleteRoles")
@@ -73,12 +70,12 @@ public class SysRolesController {
     @PostMapping("/findRoles")
     @LogController(description = "查询角色", method = "/findRoles")
     @TimeConsuming
-    public ResponseResultVO findRoles(@RequestBody List<String> roleId) {
+    public ResponseResultVO findRoles(@RequestParam String roleId, int pageIndex, int pageSize) {
         log.info("roleManager = start find userId [{}] ", roleId);
         return ResponseResultVO.builder()
-                .data(rolesService.findRoles(roleId))
+                .data(rolesService.findRoles(roleId,pageIndex,pageSize))
                 .code(ErrorCodeConstant.SUCCESS)
-                .msg("用户查询成功")
+                .msg("角色查询成功")
                 .build();
     }
 

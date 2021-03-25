@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SysRolesDao extends JpaRepository<SysRoles,String> {
@@ -17,4 +18,9 @@ public interface SysRolesDao extends JpaRepository<SysRoles,String> {
 
     @Query(value = "select s from SysRoles s where s.roleId = ?1")
     SysRoles findRoles(String rId);
+
+    Optional<SysRoles> findByRoleName(String roleName);
+
+    @Query(value = "select * from sys_roles  limit ?1 , ?2",nativeQuery = true)
+    List<SysRoles> findAllRoles(int pageIndex, int pageSize);
 }

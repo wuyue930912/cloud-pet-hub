@@ -7,13 +7,13 @@ public class ErrorCodeConstant {
     /**
      * 处理成功
      */
-    public final static Long SUCCESS = 0x01L;
+    public static final Long SUCCESS = 0x01L;
     /**
      * 校验失败
      */
-    public final static Long VALID_ERROR = 0x03L;
+    public static final Long VALID_ERROR = 0x03L;
     /**
      * 系统错误
      */
-    public final static Long SYSTEM_ERROR = 0x99L;
+    public static final Long SYSTEM_ERROR = 0x99L;
 }
