@@ -10,11 +10,9 @@ import com.pet.vo.SysUsersVo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -34,12 +32,12 @@ public class SysUsersController {
 
     private final SysUsersService usersService;
 
+    @RequiresRoles({"用户管理员","操作员"})
     @PostMapping("/createUser")
     @LogController(description = "创建用户", method = "/createUser")
     @TimeConsuming
     public ResponseEntity<ResponseResultVO> createUser(@Valid @RequestBody SysUsersVo sysUsersVo) {
         log.info("UserManager = start create user [{}] pwd [{}]", sysUsersVo.getUserName(), sysUsersVo.getUserPwd());
-
         return ResponseEntity.ok(usersService.createUser(sysUsersVo).orElse(ResponseResultVO.builder()
                 .code(ErrorCodeConstant.SYSTEM_ERROR)
                 .msg(ErrorMsgConstant.SYSTEM_ERROR)
@@ -74,10 +72,10 @@ public class SysUsersController {
     @PostMapping("/findUsers")
     @LogController(description = "查询用户", method = "/findUsers")
     @TimeConsuming
-    public ResponseResultVO findUsers(@RequestBody List<String> userId) {
+    public ResponseResultVO findUsers(@RequestParam String userId, int pageIndex, int pageSize) {
         log.info("UserManager = start find userId [{}] ", userId);
         return ResponseResultVO.builder()
-                .data(usersService.findUsers(userId))
+                .data(usersService.findUsers(userId,pageIndex,pageSize))
                 .code(ErrorCodeConstant.SUCCESS)
                 .msg("用户查询成功")
                 .build();

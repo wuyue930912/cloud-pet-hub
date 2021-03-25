@@ -1,16 +1,16 @@
 package com.pet.service;
 
+import com.pet.constant.ErrorCodeConstant;
+import com.pet.constant.ErrorMsgConstant;
 import com.pet.dao.SysRightsDao;
 import com.pet.dto.SysRightsDTO;
-import com.pet.dto.SysRolesDTO;
 import com.pet.po.SysRights;
-import com.pet.po.SysRoles;
+import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysRightsVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +20,20 @@ public class SysRightsService {
     private final SysRightsDao rightsDao;
 
     @Transactional
-    public Optional<SysRightsDTO> createRights(SysRightsVo sysRightsVo) {
+    public Optional<ResponseResultVO> createRights(SysRightsVo sysRightsVo) {
         String rightsName = sysRightsVo.getRightsName();
         String rightsUrl = sysRightsVo.getRightsUrl();
         String rightsIcon = sysRightsVo.getRightsIcon();
+
+        //重名校验
+        Optional<SysRights> optional = rightsDao.findByRightsName(rightsName);
+        if (optional.isPresent()) {
+            return Optional.of(ResponseResultVO.builder()
+                    .data(optional.get().getRightsName())
+                    .code(ErrorCodeConstant.VALID_ERROR)
+                    .msg(ErrorMsgConstant.ROLE_ALREADY_EXIST)
+                    .build());
+        }
 
         SysRights rights = new SysRights();
         rights.setRightsName(rightsName);
@@ -36,7 +46,12 @@ public class SysRightsService {
         sysRightsDTO.setRightsUrl(rightsUrl);
         sysRightsDTO.setRightsIcon(rightsIcon);
 
-        return Optional.of(sysRightsDTO);
+        // 构造结果集
+        return Optional.of(ResponseResultVO.builder()
+                .data(sysRightsDTO)
+                .code(ErrorCodeConstant.SUCCESS)
+                .msg(ErrorMsgConstant.SUCCESS)
+                .build());
     }
 
 
@@ -50,18 +65,44 @@ public class SysRightsService {
         }
     }
 
-    public Object findRights(List<String> rightId) {
+    public Object findRights(String rightId, int pageIndex, int pageSize) {
         SysRightsDTO sysRightsDTO = new SysRightsDTO();
-        List<SysRights> rightsList = new ArrayList<>();
-        for (String rId : rightId) {
-            SysRights sysRights = rightsDao.findRights(rId);
-            rightsList.add(sysRights);
+
+        if(rightId == null || rightId.equals("")){
+            sysRightsDTO.setRolesList(rightsDao.findAllRights(pageIndex,pageSize));
+        }else {
+            SysRights sysRights = rightsDao.findRights(rightId);
+            sysRightsDTO.setRightsName(sysRights.getRightsName());
+            sysRightsDTO.setRightsUrl(sysRights.getRightsUrl());
+            sysRightsDTO.setRightsIcon(sysRights.getRightsIcon());
         }
-        sysRightsDTO.setRolesList(rightsList);
+
         return sysRightsDTO;
     }
 
-    public Object editsRights(SysRightsVo sysRightsVo) {
-        return null;
+    public Optional<ResponseResultVO> editsRights(SysRightsVo sysRightsVo) {
+
+        SysRightsDTO rightsDTO = new SysRightsDTO();
+        String rightsId = sysRightsVo.getRightsId();
+        SysRights rights = rightsDao.findRights(rightsId);
+        if (rights == null) {
+            return Optional.empty();
+        }
+
+        rights.setRightsName(sysRightsVo.getRightsName());
+        rights.setRightsUrl(sysRightsVo.getRightsUrl());
+        rights.setRightsIcon(sysRightsVo.getRightsIcon());
+        rightsDao.save(rights);
+
+        rightsDTO.setRightsName(rights.getRightsName());
+        rightsDTO.setRightsUrl(rights.getRightsUrl());
+        rightsDTO.setRightsIcon(rights.getRightsIcon());
+
+        // 构造结果集
+        return Optional.of(ResponseResultVO.builder()
+                .data(rightsDTO)
+                .code(ErrorCodeConstant.SUCCESS)
+                .msg(ErrorMsgConstant.SUCCESS)
+                .build());
     }
 }
