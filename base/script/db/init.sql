@@ -57,6 +57,7 @@ create table sys_role_right
 create table sys_right
 (
     id varchar(64) null,
+    parent_id varchar(64) null,
     right_name varchar(64) null,
     right_icon varchar(64) null,
     right_url varchar(64) null,
