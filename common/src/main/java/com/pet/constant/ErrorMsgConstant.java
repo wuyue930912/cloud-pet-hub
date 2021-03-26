@@ -56,4 +56,16 @@ public class ErrorMsgConstant {
      * 角色名称修改前后一致
      */
     public static final String ROLE_NAME_MODIFY_CONSISTENT = "角色名称修改前后一致";
+    /**
+     * 用户不存在
+     */
+    public static final String USER_NOT_EXIST_ERROR = "用户不存在";
+    /**
+     * 用户权限不足
+     */
+    public static final String USER_RIGHT_ERROR = "用户权限不足";
+    /**
+     * 用户名或密码错误
+     */
+    public static final String USER_NAME_OR_PWD_ERROR = "用户名或密码错误";
 }
