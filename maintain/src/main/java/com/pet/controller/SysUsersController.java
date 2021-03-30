@@ -38,6 +38,14 @@ public class SysUsersController {
         return ResponseEntity.ok(usersService.createUser(sysUsersVo).orElseGet(ControllerUtil::getErrorResultVO));
     }
 
+    @DeleteMapping("/deleteUserById/{userId}")
+    @LogController(description = "删除用户", method = "/deleteUserById")
+    @TimeConsuming
+    public ResponseEntity<ResponseResultVO> deleteUsers(@PathVariable String userId) {
+        log.info("UserManager = start delete userIdLists [{}] ", userId);
+        return ResponseEntity.ok(usersService.deleteUserById(userId).orElseGet(ControllerUtil::getErrorResultVO));
+    }
+
     @PostMapping("/deleteUsers")
     @LogController(description = "删除用户", method = "/deleteUsers")
     @TimeConsuming
