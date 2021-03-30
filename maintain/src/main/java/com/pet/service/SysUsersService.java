@@ -13,12 +13,14 @@ import com.pet.utils.PasswordUtil;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysUsersVO;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class SysUsersService {
@@ -29,29 +31,22 @@ public class SysUsersService {
 
     @Transactional
     public Optional<ResponseResultVO> createUser(SysUsersVO sysUsersVo) {
-        // 获取参数
-        String userName = sysUsersVo.getUserName();
-        String userPwd = sysUsersVo.getUserPwd();
-        String validPwd = sysUsersVo.getValidPwd();
-
         // 重名校验
-        Optional<SysUsers> optional = usersDao.findByUserName(userName);
+        Optional<SysUsers> optional = usersDao.findByUserName(sysUsersVo.getUserName());
         if (optional.isPresent()) {
             return Optional.of(ControllerUtil.getErrorResultVO(ErrorCodeConstant.VALID_ERROR, ErrorMsgConstant.USER_ALREADY_EXIST, optional.get().getUserName()));
         }
 
         // 密码校验
-        if (!validPwd.equals(userPwd)) {
+        if (!sysUsersVo.getValidPwd().equals(sysUsersVo.getUserPwd())) {
             return Optional.of(ControllerUtil.getErrorResultVO(ErrorCodeConstant.VALID_ERROR, ErrorMsgConstant.USER_VALID_PWD_USER_PWD_NOT_EQUALS));
         }
 
         SysUsers sysUsers = UsersConvert.INSTANCE.vo2po(sysUsersVo);
-        sysUsers.setUserPwd(PasswordUtil.encodePassword(userPwd));
+        sysUsers.setUserPwd(PasswordUtil.encodePassword(sysUsersVo.getUserPwd()));
 
-        // 保存数据库
-        SysUsers saveUser = usersDao.save(sysUsers);
-        // 构造结果集
-        return Optional.of(ControllerUtil.getSuccessResultVO(UsersConvert.INSTANCE.po2dto(saveUser)));
+        // 保存数据库 构造结果集
+        return Optional.of(ControllerUtil.getSuccessResultVO(UsersConvert.INSTANCE.po2dto(usersDao.save(sysUsers))));
     }
 
     @Transactional
@@ -104,16 +99,16 @@ public class SysUsersService {
 
     public Optional<String> assignRolesToUsers(String userId, List<String> roleId) {
         SysUsers users = usersDao.findUsers(userId);
-        if(users == null){
+        if (users == null) {
             return Optional.empty();
         }
         //忽略了重复赋予角色
-        List<SysUserRole> userRoleList = userRoleDao.findUserIsRoleId(userId,roleId);
-        if(!userRoleList.isEmpty()){
+        List<SysUserRole> userRoleList = userRoleDao.findUserIsRoleId(userId, roleId);
+        if (!userRoleList.isEmpty()) {
             return Optional.of("该用户已经有此角色,请重新分配");
         }
         roleId.forEach(rId -> {
-           SysUserRole userRole =  new SysUserRole();
+            SysUserRole userRole = new SysUserRole();
             userRole.setUserId(userId);
             userRole.setRoleId(rId);
             userRoleDao.save(userRole);
