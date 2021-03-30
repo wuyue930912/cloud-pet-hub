@@ -33,15 +33,15 @@ public class ControllerUtil {
     public static ResponseResultVO getSuccessResultVO(Object data) {
         return ResponseResultVO.builder()
                 .data(data)
-                .code(ErrorCodeConstant.SYSTEM_ERROR)
-                .msg(ErrorMsgConstant.SYSTEM_ERROR)
+                .code(ErrorCodeConstant.SUCCESS)
+                .msg(ErrorMsgConstant.SUCCESS)
                 .build();
     }
 
     public static ResponseResultVO getSuccessResultVO() {
         return ResponseResultVO.builder()
-                .code(ErrorCodeConstant.SYSTEM_ERROR)
-                .msg(ErrorMsgConstant.SYSTEM_ERROR)
+                .code(ErrorCodeConstant.SUCCESS)
+                .msg(ErrorMsgConstant.SUCCESS)
                 .build();
     }
 }

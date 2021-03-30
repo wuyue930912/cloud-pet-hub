@@ -15,4 +15,7 @@ public interface SysRoleRightsDao extends JpaRepository<SysRoleRights,String> {
 
     @Query(value = "select rr from  SysRoleRights  rr where rr.roleId = ?1 ")
     List<SysRoleRights> findRightIdsByRoleId(String roleId);
+
+    @Query(value = "select rr from  SysRoleRights  rr where rr.rightsId = ?1 ")
+    List<SysRoleRights> findRightIds(String rightsId);
 }

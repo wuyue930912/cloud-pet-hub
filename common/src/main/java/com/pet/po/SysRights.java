@@ -21,4 +21,5 @@ public class SysRights extends BaseEntity {
     private String rightsName;
     private String rightsUrl;
     private String rightsIcon;
+    private String parentId;
 }

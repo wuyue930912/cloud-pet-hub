@@ -6,7 +6,7 @@ import com.pet.constant.ErrorCodeConstant;
 import com.pet.constant.ErrorMsgConstant;
 import com.pet.service.SysRolesService;
 import com.pet.vo.ResponseResultVO;
-import com.pet.vo.SysRoleVo;
+import com.pet.vo.SysRoleVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/sysRoles")
+@RequestMapping("/api/v2/roles")
 @AllArgsConstructor
 public class SysRolesController {
 
@@ -33,7 +33,7 @@ public class SysRolesController {
     @PostMapping("/createRoles")
     @LogController(description = "创建角色", method = "/createRoles")
     @TimeConsuming
-    public ResponseEntity<ResponseResultVO> createRoles(@Valid @RequestBody SysRoleVo sysRoleVo) {
+    public ResponseEntity<ResponseResultVO> createRoles(@Valid @RequestBody SysRoleVO sysRoleVo) {
         log.info("roleManager = start create role [{}] ,roleDescribe [{}]", sysRoleVo.getRoleName(),sysRoleVo.getRoleDescribe());
 
         return ResponseEntity.ok(rolesService.createRoles(sysRoleVo).orElse(ResponseResultVO.builder()
@@ -57,7 +57,7 @@ public class SysRolesController {
     @PostMapping("/editsRoles")
     @LogController(description = "修改角色", method = "/editsRoles")
     @TimeConsuming
-    public ResponseResultVO editsRoles(@Valid @RequestBody SysRoleVo sysRoleVo) {
+    public ResponseResultVO editsRoles(@Valid @RequestBody SysRoleVO sysRoleVo) {
         log.info("roleManager = start edits roles [{}] ", sysRoleVo);
         return ResponseResultVO.builder()
                 .data(rolesService.editsRoles(sysRoleVo))
@@ -66,14 +66,26 @@ public class SysRolesController {
                 .build();
     }
 
-
+    //tips 3 查询所有角色时需要 需查询出总记录数和相应权限
     @PostMapping("/findRoles")
     @LogController(description = "查询角色", method = "/findRoles")
     @TimeConsuming
-    public ResponseResultVO findRoles(@RequestParam String roleId, int pageIndex, int pageSize) {
-        log.info("roleManager = start find userId [{}] ", roleId);
+    public ResponseResultVO findRoles(@RequestParam int pageIndex, int pageSize) {
+        log.info("roleManager = start find  roles");
         return ResponseResultVO.builder()
-                .data(rolesService.findRoles(roleId,pageIndex,pageSize))
+                .data(rolesService.findRoles(pageIndex,pageSize))
+                .code(ErrorCodeConstant.SUCCESS)
+                .msg("角色查询成功")
+                .build();
+    }
+    //tips 2 查询单个角色
+    @PostMapping("/findRolesByRoleId")
+    @LogController(description = "查询角色", method = "/findRolesByRoleId")
+    @TimeConsuming
+    public ResponseResultVO findRolesByRoleId(@RequestParam String roleId) {
+        log.info("roleManager = start find roleId [{}] ", roleId);
+        return ResponseResultVO.builder()
+                .data(rolesService.findRolesByRoleId(roleId))
                 .code(ErrorCodeConstant.SUCCESS)
                 .msg("角色查询成功")
                 .build();
@@ -83,7 +95,7 @@ public class SysRolesController {
     @PostMapping("/assignRightsToRoles")
     @LogController(description = "给角色分配权限", method = "/assignRightsToRoles")
     @TimeConsuming
-    public ResponseResultVO assignRightsToRoles(@RequestBody SysRoleVo sysRoleVo) {
+    public ResponseResultVO assignRightsToRoles(@RequestBody SysRoleVO sysRoleVo) {
         String roleId = sysRoleVo.getRoleId();
         List<String> rightsIds = sysRoleVo.getRightsId();
         log.info("UserManager = start assignRightsToRoles roleId [{}] rightsIds [{}]", roleId,rightsIds);

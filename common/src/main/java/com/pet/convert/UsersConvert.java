@@ -2,7 +2,7 @@ package com.pet.convert;
 
 import com.pet.dto.SysUsersDTO;
 import com.pet.po.SysUsers;
-import com.pet.vo.SysUsersVo;
+import com.pet.vo.SysUsersVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -18,12 +18,12 @@ public interface UsersConvert {
             @Mapping(source = "userPhone", target = "userPhone"),
             @Mapping(source = "userEmail", target = "userEmail")
     })
-    SysUsers vo2po(SysUsersVo usersVo);
+    SysUsers vo2po(SysUsersVO usersVo);
 
     @Mappings({
             @Mapping(source = "userName", target = "userName"),
             @Mapping(source = "userPhone", target = "userPhone"),
             @Mapping(source = "userEmail", target = "userEmail")
     })
-    SysUsersDTO po2dto(SysUsers usersVo);
+    SysUsersDTO po2dto(SysUsers users);
 }

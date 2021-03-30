@@ -68,4 +68,8 @@ public class ErrorMsgConstant {
      * 用户名或密码错误
      */
     public static final String USER_NAME_OR_PWD_ERROR = "用户名或密码错误";
+    /**
+     * 权限的父类id不能为空
+     */
+    public static final String RIGHT_PARENT_ID_NOT_NULL  = "权限父ID不能为空";
 }

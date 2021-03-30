@@ -11,7 +11,7 @@ import com.pet.po.SysUsers;
 import com.pet.utils.ControllerUtil;
 import com.pet.utils.PasswordUtil;
 import com.pet.vo.ResponseResultVO;
-import com.pet.vo.SysUsersVo;
+import com.pet.vo.SysUsersVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class SysUsersService {
     private final SysUserRoleDao userRoleDao;
 
     @Transactional
-    public Optional<ResponseResultVO> createUser(SysUsersVo sysUsersVo) {
+    public Optional<ResponseResultVO> createUser(SysUsersVO sysUsersVo) {
         // 重名校验
         Optional<SysUsers> optional = usersDao.findByUserName(sysUsersVo.getUserName());
         if (optional.isPresent()) {
@@ -52,7 +52,6 @@ public class SysUsersService {
     @Transactional
     public Optional<ResponseResultVO> deleteUsers(List<String> userId) {
         try {
-            //修改为逻辑删除
             userId.forEach(usersDao::logicDelete);
             return Optional.of(ControllerUtil.getSuccessResultVO());
         } catch (Exception e) {
@@ -61,19 +60,15 @@ public class SysUsersService {
     }
 
 
-    public SysUsersDTO findUsers(String userId, int pageIndex, int pageSize) {
+    public SysUsersDTO findUsers(int pageIndex, int pageSize) {
         SysUsersDTO usersDTO = new SysUsersDTO();
-        if (userId == null || userId.equals("")) {
-            usersDTO.setSysUserList(usersDao.findAllUsers(pageIndex, pageSize));
-        } else {
-            SysUsers sysUsers = usersDao.findUsers(userId);
-            usersDTO = UsersConvert.INSTANCE.po2dto(sysUsers);
-        }
+        List<SysUsers> usersList = usersDao.findAllUsersAndRoles(pageIndex, pageSize);
+        usersDTO.setSysUserList(usersList);
+        usersDTO.setPageCount(usersDao.findUserCount());
         return usersDTO;
-
     }
 
-    public Optional<ResponseResultVO> editsUser(SysUsersVo sysUsersVo) {
+    public Optional<ResponseResultVO> editsUser(SysUsersVO sysUsersVo) {
         String userId = sysUsersVo.getUserId();
         SysUsers users = usersDao.findUsers(userId);
         if (users == null) {
@@ -121,5 +116,10 @@ public class SysUsersService {
 
         return Optional.of("success");
 
+    }
+
+    public SysUsersDTO findUsersByUserId(String userId) {
+        SysUsers sysUsers = usersDao.findUsers(userId);
+        return UsersConvert.INSTANCE.po2dto(sysUsers);
     }
 }

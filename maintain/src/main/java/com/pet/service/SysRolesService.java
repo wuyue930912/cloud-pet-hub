@@ -4,15 +4,18 @@ import com.pet.constant.ErrorCodeConstant;
 import com.pet.constant.ErrorMsgConstant;
 import com.pet.dao.SysRoleRightsDao;
 import com.pet.dao.SysRolesDao;
+import com.pet.dao.SysUserRoleDao;
 import com.pet.dto.SysRolesDTO;
 import com.pet.po.SysRoleRights;
 import com.pet.po.SysRoles;
+import com.pet.po.SysUserRole;
 import com.pet.vo.ResponseResultVO;
-import com.pet.vo.SysRoleVo;
+import com.pet.vo.SysRoleVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +25,9 @@ public class SysRolesService {
 
     private final SysRolesDao rolesDao;
     private final SysRoleRightsDao roleRightsDao;
+    private final SysUserRoleDao userRoleDao;
 
-    public Optional<ResponseResultVO> createRoles(SysRoleVo sysRoleVo) {
+    public Optional<ResponseResultVO> createRoles(SysRoleVO sysRoleVo) {
         String roleName = sysRoleVo.getRoleName();
         String roleDescribe = sysRoleVo.getRoleDescribe();
 
@@ -54,7 +58,7 @@ public class SysRolesService {
                 .build());
     }
 
-    public Optional<ResponseResultVO> editsRoles(SysRoleVo sysRoleVo) {
+    public Optional<ResponseResultVO> editsRoles(SysRoleVO sysRoleVo) {
         SysRolesDTO rolesDTO = new SysRolesDTO();
         String roleId = sysRoleVo.getRoleId();
         SysRoles roles = rolesDao.findRoles(roleId);
@@ -84,24 +88,32 @@ public class SysRolesService {
                 .build());
     }
 
-    public Object findRoles(String roleId, int pageIndex, int pageSize) {
+    public Object findRoles( int pageIndex, int pageSize) {
         SysRolesDTO rolesDTO = new SysRolesDTO();
-        if (roleId == null || roleId.equals("")) {
-            rolesDTO.setRolesList(rolesDao.findAllRoles(pageIndex, pageSize));
-        } else {
-            SysRoles sysRoles = rolesDao.findRoles(roleId);
-            rolesDTO.setRoleName(sysRoles.getRoleName());
-            rolesDTO.setRoleDescribe(sysRoles.getRoleDescribe());
-        }
+        List<SysRoles> rolesList = rolesDao.findAllRoles(pageIndex, pageSize);
+        rolesDTO.setRolesList(rolesList);
+        rolesDTO.setPageCount(rolesDao.findRoleCount());
         return rolesDTO;
-
     }
 
+    public Object findRolesByRoleId(String roleId) {
+        SysRolesDTO rolesDTO = new SysRolesDTO();
+        SysRoles sysRoles = rolesDao.findRoles(roleId);
+        rolesDTO.setRoleName(sysRoles.getRoleName());
+        rolesDTO.setRoleDescribe(sysRoles.getRoleDescribe());
+        return rolesDTO;
+    }
 
     @Transactional
     public Optional<String> deleteRoles(List<String> roleId) {
         try {
-            rolesDao.deleteIn(roleId);
+            List<SysUserRole> userRoleList = new ArrayList<>();
+            for (String rId : roleId) userRoleList = userRoleDao.findRoleId(rId);
+            if (userRoleList.size() > 0) {
+                return Optional.of("角色被占用,无法删除");
+            }else {
+                rolesDao.deleteIn(roleId);
+            }
             return Optional.of("success");
         } catch (Exception e) {
             return Optional.empty();
