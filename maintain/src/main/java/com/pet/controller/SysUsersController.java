@@ -6,7 +6,7 @@ import com.pet.constant.ErrorCodeConstant;
 import com.pet.service.SysUsersService;
 import com.pet.utils.ControllerUtil;
 import com.pet.vo.ResponseResultVO;
-import com.pet.vo.SysUsersVo;
+import com.pet.vo.SysUsersVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/sysUsers")
+@RequestMapping("/api/v2/users")
 @AllArgsConstructor
 public class SysUsersController {
 
@@ -33,7 +33,7 @@ public class SysUsersController {
     @PostMapping("/createUser")
     @LogController(description = "创建用户", method = "/createUser")
     @TimeConsuming
-    public ResponseEntity<ResponseResultVO> createUser(@Valid @RequestBody SysUsersVo sysUsersVo) {
+    public ResponseEntity<ResponseResultVO> createUser(@Valid @RequestBody SysUsersVO sysUsersVo) {
         log.info("UserManager = start create user [{}] pwd [{}]", sysUsersVo.getUserName(), sysUsersVo.getUserPwd());
         return ResponseEntity.ok(usersService.createUser(sysUsersVo).orElseGet(ControllerUtil::getErrorResultVO));
     }
@@ -49,7 +49,7 @@ public class SysUsersController {
     @PostMapping("/editsUser")
     @LogController(description = "修改用户", method = "/editsUser")
     @TimeConsuming
-    public ResponseResultVO editsUser(@Valid @RequestBody SysUsersVo sysUsersVo) {
+    public ResponseResultVO editsUser(@Valid @RequestBody SysUsersVO sysUsersVo) {
         log.info("UserManager = start edits user [{}] ", sysUsersVo);
         return ResponseResultVO.builder()
                 .data(usersService.editsUser(sysUsersVo))
@@ -59,13 +59,14 @@ public class SysUsersController {
     }
 
 
+    //tips 1 查询所有用户时需要 需查询出总记录数和相应角色
     @PostMapping("/findUsers")
     @LogController(description = "查询用户", method = "/findUsers")
     @TimeConsuming
     public ResponseResultVO findUsers(@RequestParam String userId, int pageIndex, int pageSize) {
         log.info("UserManager = start find userId [{}] ", userId);
         return ResponseResultVO.builder()
-                .data(usersService.findUsers(userId,pageIndex,pageSize))
+                .data(usersService.findUsers(pageIndex,pageSize))
                 .code(ErrorCodeConstant.SUCCESS)
                 .msg("用户查询成功")
                 .build();
@@ -75,7 +76,7 @@ public class SysUsersController {
     @PostMapping("/assignRolesToUsers")
     @LogController(description = "给用户分配角色", method = "/assignRolesToUsers")
     @TimeConsuming
-    public ResponseResultVO assignRolesToUsers(@RequestBody SysUsersVo sysUsersVo) {
+    public ResponseResultVO assignRolesToUsers(@RequestBody SysUsersVO sysUsersVo) {
         String userId = sysUsersVo.getUserId();
         List<String> roleId = sysUsersVo.getRoleId();
         log.info("UserManager = start assignRolesToUsers userId [{}] roleId [{}]", userId,roleId);
@@ -83,6 +84,19 @@ public class SysUsersController {
                 .data(usersService.assignRolesToUsers(userId,roleId))
                 .code(ErrorCodeConstant.SUCCESS)
                 .msg("用户分配角色成功")
+                .build();
+    }
+
+    //tips 0 查询单个用户时需要带出该用户相关角色和所有权限
+    @PostMapping("/findUsersByUserId")
+    @LogController(description = "查询用户", method = "/findUsersByUserId")
+    @TimeConsuming
+    public ResponseResultVO findUsersByUserId(@RequestParam String userId) {
+        log.info("UserManager = start find userId [{}] ", userId);
+        return ResponseResultVO.builder()
+                .data(usersService.findUsersByUserId(userId))
+                .code(ErrorCodeConstant.SUCCESS)
+                .msg("用户查询成功")
                 .build();
     }
 }

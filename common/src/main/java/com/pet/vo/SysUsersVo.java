@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Data
-public class SysUsersVo {
+public class SysUsersVO {
     private String userId;
     @NotEmpty(message = ErrorMsgConstant.USER_NAME_NOT_NULL)
     private String userName;

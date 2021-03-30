@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.util.List;
 
 @Data
-public class SysRoleVo {
+public class SysRoleVO {
     private String roleId;
     @NotBlank(message = ErrorMsgConstant.ROLE_NAME_NOT_NULL)
     private String roleName;

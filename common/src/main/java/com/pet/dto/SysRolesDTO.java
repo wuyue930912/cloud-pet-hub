@@ -9,6 +9,7 @@ import java.util.List;
 public class SysRolesDTO {
     private String roleName;
     private String roleDescribe;
-
+    //总记录数
+    private Integer pageCount;
     private List<SysRoles> rolesList;
 }

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 @Slf4j
 @RestController
-@RequestMapping("/loginBack")
+@RequestMapping("/api/v2/login")
 @AllArgsConstructor
 public class LoginController {
 

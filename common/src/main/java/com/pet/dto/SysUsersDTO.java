@@ -14,6 +14,8 @@ public class SysUsersDTO {
     private String userPwd;
     private String userPhone;
     private String userEmail;
+    //总记录数
+    private Integer pageCount;
 
     //查询的用户们
     private List<SysUsers> sysUserList;

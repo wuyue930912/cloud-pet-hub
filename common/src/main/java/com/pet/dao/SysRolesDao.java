@@ -21,6 +21,9 @@ public interface SysRolesDao extends JpaRepository<SysRoles,String> {
 
     Optional<SysRoles> findByRoleName(String roleName);
 
-    @Query(value = "select * from sys_roles  limit ?1 , ?2",nativeQuery = true)
+    @Query(value = "select * from sys_roles r left join sys_role_rights rr on r.role_id= rr.role_id left join sys_rights sr on rr.rights_id = sr.rights_id  limit ?1 , ?2",nativeQuery = true)
     List<SysRoles> findAllRoles(int pageIndex, int pageSize);
+
+    @Query(value = "select count(role_id) from SysRoles",nativeQuery = true)
+    Integer findRoleCount();
 }

@@ -22,6 +22,6 @@ public interface SysRightsDao extends JpaRepository<SysRights,String> {
 
     Optional<SysRights> findByRightsName(String rightsName);
 
-    @Query(value = "select * from sys_rights  limit ?1 , ?2",nativeQuery = true)
-    List<SysRights> findAllRights(int pageIndex, int pageSize);
+    @Query(value = "select * from sys_rights",nativeQuery = true)
+    List<SysRights> findAllRights();
 }
