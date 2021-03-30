@@ -122,4 +122,13 @@ public class SysUsersService {
         SysUsers sysUsers = usersDao.findUsers(userId);
         return UsersConvert.INSTANCE.po2dto(sysUsers);
     }
+
+    @Transactional
+    public Optional<ResponseResultVO> deleteUserById(String userId) {
+        // 删除用户
+        usersDao.deleteById(userId);
+        // 删除用户角色关系
+        userRoleDao.deleteByUserId(userId);
+        return Optional.of(ControllerUtil.getSuccessResultVO());
+    }
 }
