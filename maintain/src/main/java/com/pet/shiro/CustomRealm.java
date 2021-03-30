@@ -56,7 +56,7 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        if (StringUtil.isEmpty(authenticationToken.getPrincipal())) {
+        if (StringUtil.isEmpty(String.valueOf(authenticationToken.getPrincipal()))) {
             return null;
         }
         //获取用户信息
