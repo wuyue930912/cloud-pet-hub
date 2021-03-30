@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ResponseResultVO {
+public class ResponseResultVO<T> {
     private long code;
     private String msg;
-    private Object data;
+    private T data;
 }
