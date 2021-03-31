@@ -39,8 +39,7 @@ public class SysRightsService {
                     .msg(ErrorMsgConstant.ROLE_ALREADY_EXIST)
                     .build());
         }
-        SysRights rights = RightsConvert.INSTANCE.vo2po(sysRightsVo);
-        SysRights saveRights =rightsDao.save(rights);
+        SysRights saveRights =rightsDao.save(RightsConvert.INSTANCE.vo2po(sysRightsVo));
         // 构造结果集
         return Optional.of(ControllerUtil.getSuccessResultVO(RightsConvert.INSTANCE.po2dto(saveRights)));
     }
@@ -49,7 +48,9 @@ public class SysRightsService {
     public Optional<String> deleteRights(List<String> rightId) {
         try {
             List<SysRoleRights> roleRightsList = new ArrayList<>();
-            for (String rId : rightId) roleRightsList = roleRightsDao.findRightIds(rId);
+            for (String rId : rightId) {
+                roleRightsList = roleRightsDao.findRightIds(rId);
+            }
 
             if (roleRightsList.size() > 0) {
                 return Optional.of("权限被占用,无法删除");

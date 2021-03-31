@@ -3,8 +3,8 @@ package com.pet.controller;
 import com.pet.annotation.LogController;
 import com.pet.annotation.TimeConsuming;
 import com.pet.constant.ErrorCodeConstant;
-import com.pet.constant.ErrorMsgConstant;
 import com.pet.service.SysRightsService;
+import com.pet.utils.ControllerUtil;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.SysRightsVO;
 import lombok.AllArgsConstructor;
@@ -35,11 +35,7 @@ public class SysRightsController {
     @TimeConsuming
     public ResponseEntity<ResponseResultVO> createRights(@Valid @RequestBody SysRightsVO sysRightsVo) {
         log.info("UserManager = start create rights name[{}] url [{}]", sysRightsVo.getRightsName(), sysRightsVo.getRightsUrl());
-
-        return ResponseEntity.ok(rightsService.createRights(sysRightsVo).orElse(ResponseResultVO.builder()
-                .code(ErrorCodeConstant.SYSTEM_ERROR)
-                .msg(ErrorMsgConstant.SYSTEM_ERROR)
-                .build()));
+        return ResponseEntity.ok(rightsService.createRights(sysRightsVo).orElse(ControllerUtil.getErrorResultVO()));
     }
 
     //tips 6 判断是否有角色占用
