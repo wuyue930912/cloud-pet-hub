@@ -64,7 +64,7 @@ public class SysRightsService {
         }
     }
 
-    public Object findRights() {
+    public Optional<ResponseResultVO> findRights() {
 
         List<SysRights> rights = rightsDao.findAllRights();
         List<SysMapRightsDTO> dtoList = new ArrayList<>();
@@ -72,7 +72,8 @@ public class SysRightsService {
 
         Map<String, List<SysMapRightsDTO>> pidListMap = dtoList.stream().collect(Collectors.groupingBy(SysMapRightsDTO::getParentId));
         dtoList.forEach(dto -> dto.setChildList(pidListMap.get(dto.getRightsId())));
-        return pidListMap.get("boot");
+
+        return Optional.of(ControllerUtil.getSuccessResultVO(pidListMap.get("boot")));
 
     }
 
