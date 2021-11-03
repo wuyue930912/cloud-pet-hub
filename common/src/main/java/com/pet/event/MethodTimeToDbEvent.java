@@ -9,7 +9,7 @@ public class MethodTimeToDbEvent extends ApplicationEvent {
         this.methodTimeToDbEventEntity = eventEntity;
     }
 
-    private MethodTimeToDbEventEntity methodTimeToDbEventEntity;
+    private final MethodTimeToDbEventEntity methodTimeToDbEventEntity;
 
     public MethodTimeToDbEventEntity getMethodTimeToDbEventEntity() {
         return methodTimeToDbEventEntity;
