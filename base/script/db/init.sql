@@ -1,7 +1,8 @@
-create database pethub;
-use pethub;
+create database pet_hub;
+use pet_hub;
 
-drop table sys_user;
+drop table if exists sys_user;
+
 create table sys_user
 (
     id             varchar(64)  null,
