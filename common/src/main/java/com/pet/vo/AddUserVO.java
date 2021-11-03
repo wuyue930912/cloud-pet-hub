@@ -3,10 +3,9 @@ package com.pet.vo;
 import lombok.Data;
 
 @Data
-public class SysUserVO {
+public class AddUserVO {
     private String userName;
-    private String userNickName;
-    private String userIcon;
+    private String userPwd;
     private String userPhone;
     private String userEmail;
 }

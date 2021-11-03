@@ -3,10 +3,9 @@ package com.pet.dto;
 import lombok.Data;
 
 @Data
-public class SysUserDTO {
+public class AddUserDTO {
     private String userName;
-    private String userNickName;
-    private String userIcon;
+    private String userPwd;
     private String userPhone;
     private String userEmail;
 }

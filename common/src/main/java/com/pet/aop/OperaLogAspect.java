@@ -4,7 +4,7 @@ import com.pet.annotation.LogController;
 import com.pet.constant.HttpConstant;
 import com.pet.event.LogToDbEvent;
 import com.pet.event.entity.LogToDbEventEntity;
-import com.pet.po.SysUsers;
+import com.pet.po.SysUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -52,7 +52,7 @@ public class OperaLogAspect {
     public void beforeController(JoinPoint joinPoint, LogController logController) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         HttpSession session = request.getSession();
-        SysUsers user = (SysUsers) session.getAttribute(HttpConstant.SESSION_USER);
+        SysUser user = (SysUser) session.getAttribute(HttpConstant.SESSION_USER);
         String realMethodName = joinPoint.getSignature().getName();
 
         log.info("Aspect = [{}] ,user [{}] , method [{}] , logLevel [{}] , do [{}] , realMethod [{}]",
