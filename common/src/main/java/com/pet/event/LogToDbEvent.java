@@ -9,7 +9,7 @@ public class LogToDbEvent extends ApplicationEvent {
         this.logToDbEventEntity = logToDbEventEntity;
     }
 
-    private LogToDbEventEntity logToDbEventEntity;
+    private final LogToDbEventEntity logToDbEventEntity;
 
     public LogToDbEventEntity getLogToDbEventEntity() {
         return logToDbEventEntity;

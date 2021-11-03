@@ -59,7 +59,7 @@ public class ControllerUtil {
      * @param data 返回数据
      * @return 处理成功
      */
-    public static ResponseResultVO getSuccessResultVO(Object data) {
+    public static ResponseResultVO<Object> getSuccessResultVO(Object data) {
         return ResponseResultVO.builder()
                 .data(data)
                 .code(ErrorCodeConstant.SUCCESS)

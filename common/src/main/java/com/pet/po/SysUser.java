@@ -11,11 +11,11 @@ import javax.persistence.Id;
 @Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class SysUsers extends BaseEntity {
+public class SysUser extends BaseEntity {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String userId;
+    private String id;
     private String userName;
     private String userPwd;
     private String userPhone;
