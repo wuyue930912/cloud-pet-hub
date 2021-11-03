@@ -13,17 +13,29 @@ public class ErrorMsgConstant {
      */
     public static final String SYSTEM_ERROR = "系统异常";
     /**
-     * 用户名称已被占用
+     * 手机号应为11位数字
      */
-    public static final String USER_ALREADY_EXIST = "用户名称已被占用";
+    public static final String PHONE_ERROR = "手机号应为11位数字";
+    /**
+     * 邮箱过长
+     */
+    public static final String EMAIL_TOO_LONG = "邮箱过长";
     /**
      * 用户不能为空
      */
-    public static final String USER_NAME_NOT_NULL  = "用户不能为空";
+    public static final String USER_NAME_NOT_NULL  = "用户名不能为空";
+    /**
+     * 用户名过长
+     */
+    public static final String USER_NAME_TOO_LONG  = "用户名过长";
     /**
      * 密码不能为空
      */
     public static final String USER_PWD_NOT_NULL  = "密码不能为空";
+    /**
+     * 密码过长
+     */
+    public static final String USER_PWD_TOO_LONG  = "密码过长";
     /**
      * 校验密码不能为空
      */
