@@ -16,5 +16,5 @@ class BaseEntity implements Serializable {
     private String createUser;
     private Timestamp modifyTime;
     private String modifyUser;
-    private int logicDelete = 0;
+    private boolean deleteFlag;
 }
