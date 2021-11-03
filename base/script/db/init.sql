@@ -1,6 +1,7 @@
 create database pethub;
 use pethub;
 
+drop table sys_user;
 create table sys_user
 (
     id varchar(64) null,
@@ -14,14 +15,13 @@ create table sys_user
     create_user varchar(64) null,
     modify_time timestamp null,
     modify_user varchar(64) null,
-    is_delete int null,
+    delete_flag tinyint(1) null,
     constraint sys_user_pk
         primary key (id)
 )engine=innoDB default charset=utf8;
 
 create unique index sys_user_user_name_uindex
-	on sys_user (user_name);
-
+    on sys_user (user_name);
 create table sys_user_role
 (
     id varchar(64) null,
