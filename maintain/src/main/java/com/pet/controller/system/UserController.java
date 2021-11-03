@@ -3,7 +3,7 @@ package com.pet.controller.system;
 import com.pet.annotation.TimeConsuming;
 import com.pet.convert.UsersConvert;
 import com.pet.service.system.UserService;
-import com.pet.vo.AddUserVO;
+import com.pet.vo.system.AddUserVO;
 import com.pet.vo.ResponseResultVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
