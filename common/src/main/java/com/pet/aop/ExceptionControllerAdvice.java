@@ -22,7 +22,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity<ResponseResultVO> bindExceptionHandler(BindException exception) {
+    public ResponseEntity<ResponseResultVO<String>> bindExceptionHandler(BindException exception) {
         exception.printStackTrace();
         BindingResult result = exception.getBindingResult();
         String errorMsg = null;
@@ -30,13 +30,13 @@ public class ExceptionControllerAdvice {
             Set<FieldError> fieldErrors = new HashSet<>(result.getFieldErrors());
             errorMsg = fieldErrors.iterator().next().getDefaultMessage();
         }
-        return ResponseEntity.badRequest().body(ResponseResultVO.builder().code(ErrorCodeConstant.VALID_ERROR).msg(errorMsg).build());
+        return ResponseEntity.badRequest().body(ResponseResultVO.<String>builder().code(ErrorCodeConstant.VALID_ERROR).msg(errorMsg).data("hello").build());
     }
 
     @ExceptionHandler(value = AuthorizationException.class)
     @ResponseBody
-    public ResponseEntity<ResponseResultVO> authorExceptionHandler(AuthorizationException e) {
-        return ResponseEntity.status(401).body(ResponseResultVO.builder().code(ErrorCodeConstant.VALID_ERROR).msg(e.getMessage()).build());
+    public ResponseEntity<ResponseResultVO<String>> authorExceptionHandler(AuthorizationException e) {
+        return ResponseEntity.status(401).body(ResponseResultVO.<String>builder().code(ErrorCodeConstant.VALID_ERROR).msg(e.getMessage()).build());
     }
 
 
