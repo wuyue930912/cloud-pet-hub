@@ -3,8 +3,8 @@ package com.pet.vo.system;
 import com.pet.constant.ErrorMsgConstant;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -20,9 +20,11 @@ public class AddUserVO {
     @Length(max = 64, message = ErrorMsgConstant.USER_PWD_TOO_LONG)
     private String userPwd;
 
+    // 正则校验手机号
     @Length(min = 11, max = 11, message = ErrorMsgConstant.PHONE_ERROR)
     private String userPhone;
 
     @Length(max = 64, message = ErrorMsgConstant.EMAIL_TOO_LONG)
     private String userEmail;
+
 }

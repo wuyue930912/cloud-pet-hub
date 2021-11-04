@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseResultVO<String> add(AddUserDTO dto) {
+
+        if (sysUsersDao.existsByUserName(dto.getUserName())) {
+            return ResponseResultVO.<String>builder()
+                    .code(ErrorCodeConstant.VALID_ERROR).msg(ErrorMsgEnum.USER_ALREADY_EXIST.getMsg()).build();
+        }
+
         // 转换成po
         SysUser user = UsersConvert.INSTANCE.dto2po(dto);
 
@@ -35,6 +42,7 @@ public class UserServiceImpl implements UserService {
         sysUsersDao.save(user);
 
         // 返回结果
-        return ResponseResultVO.<String>builder().code(ErrorCodeConstant.SUCCESS).msg(ErrorMsgEnum.SUCCESS.getMsg()).build();
+        return ResponseResultVO.<String>builder()
+                .code(ErrorCodeConstant.SUCCESS).msg(ErrorMsgEnum.SUCCESS.getMsg()).build();
     }
 }
