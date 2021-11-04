@@ -25,7 +25,7 @@ public class UserController {
     @PostMapping("/add")
     @TimeConsuming
     public ResponseEntity<ResponseResultVO<String>> addUser(@RequestBody @Validated AddUserVO vo){
-        log.info("start add user [{}]", vo);
+        log.info("start add user, username : {} , pwd : {}", vo.getUserName(), vo.getUserPwd());
         return ResponseEntity.ok(userService.add(UsersConvert.INSTANCE.vo2dto(vo)));
     }
 

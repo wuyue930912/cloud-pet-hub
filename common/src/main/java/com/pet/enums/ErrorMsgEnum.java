@@ -4,10 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorMsgEnum {
-    SUCCESS(0, "处理成功");
+    SUCCESS(0, "处理成功"),
+    USER_ALREADY_EXIST(1, "用户名重复");
 
-    private Integer code;
-    private String msg;
+    private final Integer code;
+    private final String msg;
 
     ErrorMsgEnum(Integer code, String msg){
         this.code = code;
