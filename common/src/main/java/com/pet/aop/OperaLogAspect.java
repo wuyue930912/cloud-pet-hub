@@ -54,19 +54,21 @@ public class OperaLogAspect {
         HttpSession session = request.getSession();
         SysUser user = (SysUser) session.getAttribute(HttpConstant.SESSION_USER);
         String realMethodName = joinPoint.getSignature().getName();
+        String requestIp = getIp(request);
 
-        log.info("Aspect = [{}] ,user [{}] , method [{}] , logLevel [{}] , do [{}] , realMethod [{}]",
-                new Date(), user == null ? "system" : user.getUserName(), logController.method(), logController.logLevel(), logController.description(), realMethodName);
+        log.info("Aspect = [{}] ,user [{}] , method [{}] , logLevel [{}] , do [{}] , realMethod [{}] , ip [{}]",
+                new Date(), Objects.isNull(user) ? "system" : user.getUserName(), logController.method(), logController.logLevel(), logController.description(), realMethodName, requestIp);
 
         // 异步处理日志
         publisher.publishEvent(new LogToDbEvent(
                 LogToDbEventEntity.builder()
                         .date(new Date())
-                        .userName(user == null ? "system" : user.getUserName())
+                        .userName(Objects.isNull(user) ? "system" : user.getUserName())
                         .method(logController.method())
                         .logLevel(logController.logLevel())
                         .description(logController.description())
                         .realMethod(realMethodName)
+                        .ip(requestIp)
                         .build()));
     }
 
@@ -86,4 +88,24 @@ public class OperaLogAspect {
         log.info("Aspect = [{}] ,class [{}] , method [{}] , time consuming[{}]", new Date(), className, method, System.currentTimeMillis() - begin);
         return ret;
     }
+
+    /**
+     * 获取源IP
+     * @param request 请求对象
+     * @return  源IP
+     */
+    public static String getIp(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-AuthenticationIp");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-AuthenticationIp");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
+
 }
