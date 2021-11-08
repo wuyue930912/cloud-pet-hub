@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.bytebuddy.implementation.bind.annotation.SuperCall;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,21 +17,22 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Entity
 @ToString(callSuper = true)
-public class SysUser extends BaseEntity {
+public class SysLog extends BaseEntity {
+
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String userName;
-    private String userPwd;
-    private String userPhone;
-    private String userEmail;
+    private int logLevel;
+    private String method;
+    private String description;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        SysUser sysUser = (SysUser) o;
+        SysLog sysUser = (SysLog) o;
         return id != null && Objects.equals(id, sysUser.id);
     }
 

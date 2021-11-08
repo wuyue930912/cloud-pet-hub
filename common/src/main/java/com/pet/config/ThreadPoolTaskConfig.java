@@ -23,12 +23,12 @@ public class ThreadPoolTaskConfig {
 
     @Bean("logTaskExecutor")
     public ThreadPoolTaskExecutor logTaskExecutor() {
-        return getThreadPoolTaskExecutor("log-thread-");
+        return getThreadPoolTaskExecutor("[ log-thread ]-");
     }
 
     @Bean("schedulingTaskExecutor")
     public ThreadPoolTaskExecutor schedulingTaskExecutor() {
-        return getThreadPoolTaskExecutor("scheduling-thread");
+        return getThreadPoolTaskExecutor("[ scheduling-thread ]");
     }
 
     private ThreadPoolTaskExecutor getThreadPoolTaskExecutor(String s) {
