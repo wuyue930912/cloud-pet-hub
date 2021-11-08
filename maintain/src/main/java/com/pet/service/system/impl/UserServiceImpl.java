@@ -1,7 +1,7 @@
 package com.pet.service.system.impl;
 
 import com.pet.constant.ErrorCodeConstant;
-import com.pet.convert.UsersConvert;
+import com.pet.convert.SysUserConvert;
 import com.pet.dao.SysUserDao;
 import com.pet.dto.AddUserDTO;
 import com.pet.enums.ErrorMsgEnum;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 转换成po
-        SysUser user = UsersConvert.INSTANCE.dto2po(dto);
+        SysUser user = SysUserConvert.INSTANCE.dto2po(dto);
 
         // 密码加密
         user.setUserPwd(PasswordUtil.encodePassword(dto.getUserPwd()));

@@ -3,7 +3,7 @@ package com.pet.controller.system;
 import com.pet.annotation.LogController;
 import com.pet.annotation.TimeConsuming;
 import com.pet.constant.LogLevelConstant;
-import com.pet.convert.UsersConvert;
+import com.pet.convert.SysUserConvert;
 import com.pet.service.system.UserService;
 import com.pet.vo.system.AddUserVO;
 import com.pet.vo.ResponseResultVO;
@@ -35,7 +35,7 @@ public class UserController {
     @TimeConsuming
     public ResponseEntity<ResponseResultVO<String>> addUser(@RequestBody @Validated AddUserVO vo) {
         log.info("start add user, username : {} , pwd : {}", vo.getUserName(), vo.getUserPwd());
-        return ResponseEntity.ok(userService.add(UsersConvert.INSTANCE.vo2dto(vo)));
+        return ResponseEntity.ok(userService.add(SysUserConvert.INSTANCE.vo2dto(vo)));
     }
 
 

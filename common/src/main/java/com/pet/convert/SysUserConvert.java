@@ -7,8 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
-public interface UsersConvert {
-    UsersConvert INSTANCE = Mappers.getMapper(UsersConvert.class);
+public interface SysUserConvert {
+    SysUserConvert INSTANCE = Mappers.getMapper(SysUserConvert.class);
 
     AddUserDTO vo2dto(AddUserVO vo);
 
