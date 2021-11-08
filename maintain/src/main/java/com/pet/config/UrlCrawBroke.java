@@ -19,7 +19,7 @@ public class UrlCrawBroke {
         InputStream is;
         String pageStr;
         StringBuilder curUrl;
-        int maxPages = 36;
+        int maxPages = 38;
         for (int i = 1; i < maxPages; i++) {
             Thread.sleep(2500);
             System.out.println("正在查找第 " + i + " 页中的博客地址");

@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseResultVO<String> add(AddUserDTO dto) {
 
+        // 用户名重复校验
         if (sysUsersDao.existsByUserName(dto.getUserName())) {
             return ResponseResultVO.<String>builder()
                     .code(ErrorCodeConstant.VALID_ERROR).msg(ErrorMsgEnum.USER_ALREADY_EXIST.getMsg()).build();

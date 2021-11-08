@@ -1,6 +1,8 @@
 package com.pet.controller.system;
 
+import com.pet.annotation.LogController;
 import com.pet.annotation.TimeConsuming;
+import com.pet.constant.LogLevelConstant;
 import com.pet.convert.UsersConvert;
 import com.pet.service.system.UserService;
 import com.pet.vo.system.AddUserVO;
@@ -22,9 +24,16 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * 11.8 EXAMPLE LogController annotation and publisher
+     *
+     * @param vo 新增用户VO
+     * @return String
+     */
     @PostMapping("/add")
+    @LogController(description = "新增用户", logLevel = LogLevelConstant.NOTICE, method = "addUser")
     @TimeConsuming
-    public ResponseEntity<ResponseResultVO<String>> addUser(@RequestBody @Validated AddUserVO vo){
+    public ResponseEntity<ResponseResultVO<String>> addUser(@RequestBody @Validated AddUserVO vo) {
         log.info("start add user, username : {} , pwd : {}", vo.getUserName(), vo.getUserPwd());
         return ResponseEntity.ok(userService.add(UsersConvert.INSTANCE.vo2dto(vo)));
     }
