@@ -41,6 +41,8 @@ create table sys_log
     user_name   varchar(64) null,
     method      varchar(128) null,
     description varchar(64) null,
+    log_level   int(1) null ,
+    ip          varchar(20) null,
     create_time timestamp null,
     create_user varchar(64) null,
     modify_time timestamp null,
