@@ -32,8 +32,8 @@ public class SysLog extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        SysLog sysUser = (SysLog) o;
-        return id != null && Objects.equals(id, sysUser.id);
+        SysLog sysLog = (SysLog) o;
+        return id != null && Objects.equals(id, sysLog.id);
     }
 
     @Override
