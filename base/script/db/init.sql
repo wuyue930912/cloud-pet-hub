@@ -52,3 +52,24 @@ create table sys_log
         primary key (id)
 ) engine = innoDB
   default charset = utf8;
+
+/**
+  异常日志表
+ */
+drop table if exists error_sys_log;
+
+create table error_sys_log
+(
+    id          varchar(64) null,
+    description blob null,
+    log_level   int(1) null ,
+    errorCode   int(3) null ,
+    create_time timestamp null,
+    create_user varchar(64) null,
+    modify_time timestamp null,
+    modify_user varchar(64) null,
+    delete_flag tinyint(1) null,
+    constraint error_sys_log_pk
+        primary key (id)
+) engine = innoDB
+  default charset = utf8;

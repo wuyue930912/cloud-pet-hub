@@ -1,5 +1,6 @@
 package com.pet.service.system.impl;
 
+import com.pet.config.ServiceException;
 import com.pet.constant.ErrorCodeConstant;
 import com.pet.convert.SysUserConvert;
 import com.pet.dao.SysUserDao;
@@ -29,8 +30,7 @@ public class UserServiceImpl implements UserService {
 
         // 用户名重复校验
         if (sysUsersDao.existsByUserName(dto.getUserName())) {
-            return ResponseResultVO.<String>builder()
-                    .code(ErrorCodeConstant.VALID_ERROR).msg(ErrorMsgEnum.USER_ALREADY_EXIST.getMsg()).build();
+            throw new ServiceException(ErrorMsgEnum.USER_ALREADY_EXIST.getMsg());
         }
 
         // 转换成po
