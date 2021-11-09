@@ -61,9 +61,9 @@ drop table if exists error_sys_log;
 create table error_sys_log
 (
     id          varchar(64) null,
-    description blob null,
+    description  v null,
     log_level   int(1) null ,
-    errorCode   int(3) null ,
+    error_code   int(3) null ,
     create_time timestamp null,
     create_user varchar(64) null,
     modify_time timestamp null,
