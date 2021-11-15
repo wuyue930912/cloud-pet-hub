@@ -16,7 +16,7 @@ public class SwaggerConfig {
     public Docket docket() {
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("大麦田")
-                .description("大麦田のSwagger wuyue930912@live.com")
+                .description("大麦田のSwagger , wuyue930912@live.com , https://blog.csdn.net/weixin_38045214?spm=1001.2014.3001.5343")
                 .version("3.0")
                 .build();
         return new Docket(DocumentationType.OAS_30)
