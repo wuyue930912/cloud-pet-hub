@@ -45,4 +45,15 @@ public class UserServiceImpl implements UserService {
         return ResponseResultVO.<String>builder()
                 .code(ErrorCodeConstant.SUCCESS).msg(ErrorMsgEnum.SUCCESS.getMsg()).build();
     }
+
+    @Override
+    @Transactional
+    public ResponseResultVO<String> delUser(String userId) {
+        //通过userid判断该用户是否存在
+        if (!sysUsersDao.existsById(userId)) {
+            throw new ServiceException(ErrorMsgEnum.USER_NOT_EXIST.getMsg());
+        }
+        sysUsersDao.deleteById(userId);
+        return ResponseResultVO.<String>builder().code(ErrorMsgEnum.SUCCESS.getCode()).msg(ErrorMsgEnum.SUCCESS.getMsg()).build();
+    }
 }
