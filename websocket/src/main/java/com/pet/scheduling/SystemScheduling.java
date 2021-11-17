@@ -1,6 +1,10 @@
 package com.pet.scheduling;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pet.constant.CronConstant;
+import com.pet.constant.RoomsConstant;
+import com.pet.servers.SystemInfoServer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,15 +19,22 @@ import java.util.Date;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class SystemScheduling {
+
+    private final SystemInfoServer systemInfoServer;
 
     /**
      * 定时任务例子
      */
     @Async("schedulingTaskExecutor")
-    @Scheduled(cron = CronConstant.ONE_HOUR)
+    @Scheduled(cron = CronConstant.FIVE_SECOND)
     public void logging() throws MalformedObjectNameException, InstanceNotFoundException, ReflectionException {
-        log.info("SystemScheduling = now : [{}] memory : [{}] cpu : [{}]", new Date(), Runtime.getRuntime().totalMemory() / (1024 * 1024) + "M", getCpu());
+        JSONObject json = new JSONObject();
+        json.put("cpu", getCpu());
+        json.put("memory", Runtime.getRuntime().totalMemory());
+        json.put("time", new Date());
+        systemInfoServer.sendMsg(RoomsConstant.SYSTEM_INFO, json.toString());
     }
 
     private int getCpu() throws MalformedObjectNameException, ReflectionException, InstanceNotFoundException {
