@@ -69,10 +69,10 @@ public class ExceptionControllerAdvice {
         publisher.publishEvent(new ErrorLogToDbEvent(
                 ErrorLogToDbEventEntity.builder()
                         .date(new Date())
-                        .errorCode(403)
+                        .errorCode(400)
                         .description(e.getMessage())
                         .logLevel(LogLevelConstant.ERROR)
                         .build()));
-        return ResponseEntity.status(403).body(ResponseResultVO.<String>builder().code(ErrorCodeConstant.CHECK_ERROR).msg(e.getMessage()).build());
+        return ResponseEntity.status(400).body(ResponseResultVO.<String>builder().code(ErrorCodeConstant.CHECK_ERROR).msg(e.getMessage()).build());
     }
 }
