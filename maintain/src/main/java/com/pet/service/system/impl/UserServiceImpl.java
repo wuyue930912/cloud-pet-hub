@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseResultVO<String> add(AddUserDTO dto) {
-
         // 用户名重复校验
         if (sysUsersDao.existsByUserName(dto.getUserName())) {
             throw new ServiceException(ErrorMsgEnum.USER_ALREADY_EXIST.getMsg());
@@ -71,10 +70,25 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public ResponseResultVO<PageResultVO<List<SearchUserResultVO>>> searchUser(PageParamVO<SearchUserVO> pageParam) {
-        Page<SysUser> page;
         Pageable pageable = PageRequest.of(pageParam.getPageIndex() - 1, pageParam.getPageSize());
         SearchUserVO searchUserVO = pageParam.getSearchData();
 
+        // 构造Page
+        Page<SysUser> page = getPage(pageable, searchUserVO);
+
+        // 构造结果集
+        List<SearchUserResultVO> vos = new ArrayList<>();
+        page.get().forEach(po -> vos.add(SysUserConvert.INSTANCE.po2vo(po)));
+
+        return ResponseResultVO.<PageResultVO<List<SearchUserResultVO>>>builder()
+                .code(ErrorMsgEnum.SUCCESS.getCode())
+                .msg(ErrorMsgEnum.SUCCESS.getMsg())
+                .data(PageResultVO.<List<SearchUserResultVO>>builder().result(vos).count(page.getTotalElements()).build())
+                .build();
+    }
+
+    private Page<SysUser> getPage(Pageable pageable, SearchUserVO searchUserVO) {
+        Page<SysUser> page;
         if (Objects.nonNull(searchUserVO)) {
             // 存在搜索条件
             SysUser user = new SysUser();
@@ -88,15 +102,6 @@ public class UserServiceImpl implements UserService {
             // 不存在搜索条件
             page = sysUsersDao.findAll(pageable);
         }
-
-        // 构造结果集
-        List<SearchUserResultVO> vos = new ArrayList<>();
-        page.get().forEach(po -> vos.add(SysUserConvert.INSTANCE.po2vo(po)));
-
-        return ResponseResultVO.<PageResultVO<List<SearchUserResultVO>>>builder()
-                .code(ErrorMsgEnum.SUCCESS.getCode())
-                .msg(ErrorMsgEnum.SUCCESS.getMsg())
-                .data(PageResultVO.<List<SearchUserResultVO>>builder().result(vos).count(page.getTotalElements()).build())
-                .build();
+        return page;
     }
 }
