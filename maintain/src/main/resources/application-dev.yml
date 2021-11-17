@@ -11,7 +11,6 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  druid:
 
   datasource:
     url: jdbc:mariadb://127.0.0.1:3306/pet_hub?characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8
