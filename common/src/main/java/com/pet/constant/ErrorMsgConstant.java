@@ -37,6 +37,14 @@ public class ErrorMsgConstant {
      */
     public static final String USER_PWD_TOO_LONG  = "密码过长";
     /**
+     * pageIndex不能为空
+     */
+    public static final String PAGE_INDEX_NOT_NULL  = "pageIndex不能为空";
+    /**
+     * pageSize不能为空
+     */
+    public static final String PAGE_SIZE_NOT_NULL  = "pageSize不能为空";
+    /**
      * 校验密码不能为空
      */
     public static final String USER_VALID_PWD_NOT_NULL  = "校验密码不能为空";

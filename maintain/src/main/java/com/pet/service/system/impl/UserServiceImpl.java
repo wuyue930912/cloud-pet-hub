@@ -9,12 +9,24 @@ import com.pet.enums.ErrorMsgEnum;
 import com.pet.po.SysUser;
 import com.pet.service.system.UserService;
 import com.pet.utils.PasswordUtil;
+import com.pet.vo.PageParamVO;
+import com.pet.vo.PageResultVO;
 import com.pet.vo.ResponseResultVO;
+import com.pet.vo.system.SearchUserResultVO;
+import com.pet.vo.system.SearchUserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -44,5 +56,43 @@ public class UserServiceImpl implements UserService {
         // 返回结果
         return ResponseResultVO.<String>builder()
                 .code(ErrorCodeConstant.SUCCESS).msg(ErrorMsgEnum.SUCCESS.getMsg()).build();
+    }
+
+    @Override
+    @Transactional
+    public ResponseResultVO<String> delUser(String userId) {
+        //通过userid判断该用户是否存在
+        if (!sysUsersDao.existsById(userId)) {
+            throw new ServiceException(ErrorMsgEnum.USER_NOT_EXIST.getMsg());
+        }
+        sysUsersDao.deleteById(userId);
+        return ResponseResultVO.<String>builder().code(ErrorMsgEnum.SUCCESS.getCode()).msg(ErrorMsgEnum.SUCCESS.getMsg()).build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseResultVO<PageResultVO<List<SearchUserResultVO>>> searchUser(PageParamVO<SearchUserVO> pageParam) {
+        Page<SysUser> page;
+        Pageable pageable = PageRequest.of(pageParam.getPageIndex() - 1, pageParam.getPageSize());
+        SearchUserVO searchUserVO = pageParam.getSearchData();
+        if (Objects.nonNull(searchUserVO)) {
+            SysUser user = new SysUser();
+            user.setUserName(searchUserVO.getUserName());
+            user.setUserPhone(searchUserVO.getPhone());
+
+            Example<SysUser> example = Example.of(user);
+            page = sysUsersDao.findAll(example, pageable);
+        } else {
+            page = sysUsersDao.findAll(pageable);
+        }
+
+        List<SearchUserResultVO> vos = new ArrayList<>();
+        page.get().forEach(po -> vos.add(SysUserConvert.INSTANCE.po2vo(po)));
+
+        return ResponseResultVO.<PageResultVO<List<SearchUserResultVO>>>builder()
+                .code(ErrorMsgEnum.SUCCESS.getCode())
+                .msg(ErrorMsgEnum.SUCCESS.getMsg())
+                .data(PageResultVO.<List<SearchUserResultVO>>builder().result(vos).count(page.getTotalElements()).build())
+                .build();
     }
 }
