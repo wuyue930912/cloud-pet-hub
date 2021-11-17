@@ -20,7 +20,6 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +74,9 @@ public class UserServiceImpl implements UserService {
         Page<SysUser> page;
         Pageable pageable = PageRequest.of(pageParam.getPageIndex() - 1, pageParam.getPageSize());
         SearchUserVO searchUserVO = pageParam.getSearchData();
+
         if (Objects.nonNull(searchUserVO)) {
+            // 存在搜索条件
             SysUser user = new SysUser();
             user.setUserName(searchUserVO.getUserName());
             user.setUserPhone(searchUserVO.getPhone());
@@ -84,9 +85,11 @@ public class UserServiceImpl implements UserService {
             Example<SysUser> example = Example.of(user);
             page = sysUsersDao.findAll(example, pageable);
         } else {
+            // 不存在搜索条件
             page = sysUsersDao.findAll(pageable);
         }
 
+        // 构造结果集
         List<SearchUserResultVO> vos = new ArrayList<>();
         page.get().forEach(po -> vos.add(SysUserConvert.INSTANCE.po2vo(po)));
 
