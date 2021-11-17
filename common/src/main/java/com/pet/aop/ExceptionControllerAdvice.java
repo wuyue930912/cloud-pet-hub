@@ -73,6 +73,6 @@ public class ExceptionControllerAdvice {
                         .description(e.getMessage())
                         .logLevel(LogLevelConstant.ERROR)
                         .build()));
-        return ResponseEntity.status(400).body(ResponseResultVO.<String>builder().code(ErrorCodeConstant.CHECK_ERROR).msg(e.getMessage()).build());
+        return ResponseEntity.status(400).body(ResponseResultVO.<String>builder().code(ErrorCodeConstant.VALID_ERROR).msg(e.getMessage()).build());
     }
 }

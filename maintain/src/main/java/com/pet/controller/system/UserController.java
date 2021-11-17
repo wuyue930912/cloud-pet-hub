@@ -52,7 +52,7 @@ public class UserController {
     })
     @ApiResponses({
             @ApiResponse(code = 1, message = ErrorMsgConstant.SUCCESS),
-            @ApiResponse(code = 2, message = ErrorMsgConstant.USER_NAME_ALREADY_EXIST),
+            @ApiResponse(code = 3, message = ErrorMsgConstant.USER_NAME_ALREADY_EXIST),
             @ApiResponse(code = 3, message = ErrorMsgConstant.USER_NAME_NOT_NULL),
             @ApiResponse(code = 3, message = ErrorMsgConstant.USER_PWD_NOT_NULL),
             @ApiResponse(code = 3, message = ErrorMsgConstant.USER_PWD_NOT_MATCH),
