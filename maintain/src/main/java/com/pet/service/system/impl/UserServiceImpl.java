@@ -79,6 +79,7 @@ public class UserServiceImpl implements UserService {
             SysUser user = new SysUser();
             user.setUserName(searchUserVO.getUserName());
             user.setUserPhone(searchUserVO.getPhone());
+            user.setCreateTime(null);
 
             Example<SysUser> example = Example.of(user);
             page = sysUsersDao.findAll(example, pageable);

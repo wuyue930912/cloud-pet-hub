@@ -15,9 +15,9 @@ public class SwaggerConfig {
     @Bean
     public Docket docket() {
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("大麦田 https://blog.csdn.net/weixin_38045214?spm=1001.2014.3001.5343")
+                .title("大麦田")
                 .description("大麦田のSwagger 3.0 , wuyue930912@live.com")
-                .termsOfServiceUrl("https://pethub.coding.net/issues")
+                .termsOfServiceUrl("https://blog.csdn.net/weixin_38045214?spm=1001.2014.3001.5343")
                 .version("v1.0.0")
                 .build();
         return new Docket(DocumentationType.OAS_30)

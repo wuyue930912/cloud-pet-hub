@@ -13,5 +13,6 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 public class MaintainStarter {
     public static void main(String[] args) {
         SpringApplication.run(MaintainStarter.class, args);
+        log.info("swagger 3 : [{}]", "http://127.0.0.1:8080/swagger-ui/index.html#/");
     }
 }
