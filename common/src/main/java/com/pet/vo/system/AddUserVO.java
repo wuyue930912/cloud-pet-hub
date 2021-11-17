@@ -1,6 +1,7 @@
 package com.pet.vo.system;
 
 import com.pet.constant.ErrorMsgConstant;
+import com.pet.constant.RegConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 
 @Getter
@@ -25,6 +27,7 @@ public class AddUserVO {
     @NotNull(message = ErrorMsgConstant.USER_PWD_NOT_NULL)
     @NotBlank(message = ErrorMsgConstant.USER_PWD_NOT_NULL)
     @Length(max = 64, message = ErrorMsgConstant.USER_PWD_TOO_LONG)
+    @Pattern(regexp = RegConstant.PWD_REG, message = ErrorMsgConstant.USER_PWD_NOT_MATCH)
     @ApiModelProperty(value = "密码", required = true,  position = 2, example = "wuyue930912")
     private String userPwd;
 
@@ -34,6 +37,7 @@ public class AddUserVO {
 
     @Length(max = 64, message = ErrorMsgConstant.EMAIL_TOO_LONG)
     @ApiModelProperty(value = "邮箱", position = 4, example = "wuyue930912@live.com")
+    @Pattern(regexp = RegConstant.EMAIL_REG, message = ErrorMsgConstant.USER_EMAIL_NOT_MATCH)
     private String userEmail;
 
 }
