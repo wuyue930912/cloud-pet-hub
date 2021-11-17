@@ -53,6 +53,10 @@ public class ErrorMsgConstant {
      */
     public static final String USER_PWD_NOT_MATCH  = "密码不符合规范";
     /**
+     * 邮箱不符合规范
+     */
+    public static final String USER_EMAIL_NOT_MATCH  = "邮箱不符合规范";
+    /**
      * 第二次输入密码不符合规范
      */
     public static final String USER_VALID_PWD_NOT_MATCH  = "第二次输入密码不符合规范";

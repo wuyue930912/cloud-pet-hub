@@ -4,9 +4,7 @@ import com.pet.config.ServiceException;
 import com.pet.constant.ErrorCodeConstant;
 import com.pet.constant.LogLevelConstant;
 import com.pet.event.ErrorLogToDbEvent;
-import com.pet.event.LogToDbEvent;
 import com.pet.event.entity.ErrorLogToDbEventEntity;
-import com.pet.event.entity.LogToDbEventEntity;
 import com.pet.vo.ResponseResultVO;
 import lombok.RequiredArgsConstructor;
 import org.apache.shiro.authz.AuthorizationException;
@@ -46,7 +44,7 @@ public class ExceptionControllerAdvice {
                 ErrorLogToDbEventEntity.builder()
                         .date(new Date())
                         .errorCode(400)
-                        .description(exception.getMessage())
+                        .description(errorMsg)
                         .logLevel(LogLevelConstant.ERROR)
                         .build()));
         return ResponseEntity.badRequest().body(ResponseResultVO.<String>builder().code(ErrorCodeConstant.VALID_ERROR).msg(errorMsg).build());
