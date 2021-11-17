@@ -2,6 +2,7 @@ package com.pet.controller.system;
 
 import com.pet.annotation.LogController;
 import com.pet.annotation.TimeConsuming;
+import com.pet.constant.ErrorMsgConstant;
 import com.pet.constant.LogLevelConstant;
 import com.pet.convert.SysUserConvert;
 import com.pet.service.system.UserService;
@@ -44,11 +45,12 @@ public class UserController {
             @ApiImplicitParam(name = "vo", value = "用户信息", required = true, dataType = "AddUserVO"),
     })
     @ApiResponses({
-            @ApiResponse(code = 1, message = "处理成功"),
-            @ApiResponse(code = 2, message = "用户名重复"),
-            @ApiResponse(code = 3, message = "用户名不能为空"),
-            @ApiResponse(code = 3, message = "密码不能为空"),
-            @ApiResponse(code = 3, message = "手机号应为11位数字"),
+            @ApiResponse(code = 1, message = ErrorMsgConstant.SUCCESS),
+            @ApiResponse(code = 2, message = ErrorMsgConstant.USER_NAME_ALREADY_EXIST),
+            @ApiResponse(code = 3, message = ErrorMsgConstant.USER_NAME_NOT_NULL),
+            @ApiResponse(code = 3, message = ErrorMsgConstant.USER_PWD_NOT_NULL),
+            @ApiResponse(code = 3, message = ErrorMsgConstant.USER_PWD_NOT_MATCH),
+            @ApiResponse(code = 3, message = ErrorMsgConstant.USER_EMAIL_NOT_MATCH)
     })
     public ResponseEntity<ResponseResultVO<String>> addUser(@RequestBody @Validated AddUserVO vo) {
         log.info("start add user, username : {} , pwd : {}", vo.getUserName(), vo.getUserPwd());
@@ -66,8 +68,8 @@ public class UserController {
     @ApiOperation(value = "删除单个用户", notes = "删除用户:通过用户id进行用户删除")
     @ApiImplicitParam(name = "userId", value = "被删除用户id", required = true, dataType = "String")
     @ApiResponses({
-            @ApiResponse(code = 1, message = "处理成功"),
-            @ApiResponse(code = 2, message = "用户不存在")
+            @ApiResponse(code = 1, message = ErrorMsgConstant.SUCCESS),
+            @ApiResponse(code = 2, message = ErrorMsgConstant.USER_NOT_EXIST_ERROR)
     })
     public ResponseEntity<ResponseResultVO<String>> delUser(@PathVariable String userId) {
         log.info("start delete user, userId :{}", userId);
@@ -85,7 +87,9 @@ public class UserController {
     @ApiOperation(value = "分页查询用户", notes = "查询用户:通过SearchUserVO进行查询")
     @ApiImplicitParam(name = "pageParam", value = "被删除用户id", required = true, dataType = "PageParamVO")
     @ApiResponses({
-            @ApiResponse(code = 1, message = "处理成功")
+            @ApiResponse(code = 1, message = ErrorMsgConstant.SUCCESS),
+            @ApiResponse(code = 3, message = ErrorMsgConstant.PAGE_INDEX_NOT_NULL),
+            @ApiResponse(code = 3, message = ErrorMsgConstant.PAGE_SIZE_NOT_NULL)
     })
     public ResponseEntity<ResponseResultVO<PageResultVO<List<SearchUserResultVO>>>> searchUser(@RequestBody @Validated PageParamVO<SearchUserVO> pageParam) {
         log.info("start search user, example :{}", pageParam.toString());

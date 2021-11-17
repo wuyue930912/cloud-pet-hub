@@ -7,7 +7,7 @@ public class ErrorMsgConstant {
     /**
      * 提交成功
      */
-    public static final String SUCCESS = "提交成功";
+    public static final String SUCCESS = "处理成功";
     /**
      * 系统异常
      */
@@ -24,6 +24,10 @@ public class ErrorMsgConstant {
      * 用户不能为空
      */
     public static final String USER_NAME_NOT_NULL  = "用户名不能为空";
+    /**
+     * 用户名重复
+     */
+    public static final String USER_NAME_ALREADY_EXIST  = "用户名重复";
     /**
      * 用户名过长
      */

@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
 public class PageParamVO<T> {
     @NotNull(message = ErrorMsgConstant.PAGE_INDEX_NOT_NULL)
     @ApiModelProperty(value = "pageIndex", position = 1, example = "1")
-    private int pageIndex;
+    private Integer pageIndex;
     @NotNull(message = ErrorMsgConstant.PAGE_SIZE_NOT_NULL)
     @ApiModelProperty(value = "pageIndex", position = 2, example = "10")
-    private int pageSize;
+    private Integer pageSize;
     @ApiModelProperty(value = "搜索条件", position = 3)
     private T searchData;
 }
