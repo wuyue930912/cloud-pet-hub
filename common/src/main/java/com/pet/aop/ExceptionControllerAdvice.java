@@ -33,7 +33,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity<ResponseResultVO<String>> bindExceptionHandler(BindException exception) {
+    public ResponseEntity<ResponseResultVO<String>> bindExceptionHandler(MethodArgumentNotValidException exception) {
         BindingResult result = exception.getBindingResult();
         String errorMsg = null;
         if (result.hasErrors()) {
