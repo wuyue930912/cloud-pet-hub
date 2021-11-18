@@ -1,0 +1,36 @@
+server:
+  port: 80
+
+logging:
+  file:
+    path: D:\\LOG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8888/eureka
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+      routes:
+        - id: maintain
+          uri: lb://maintain
+          predicates:
+            - Path=/maintain/**
+
+        - id: websocket
+          uri: lb://websocket
+          predicates:
+            - Path=/websocket/**
+
+  application:
+    name: gateway
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8

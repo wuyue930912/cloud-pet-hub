@@ -1,12 +1,25 @@
 server:
   port: 8080
+  servlet:
+    session:
+      timeout: PT03M
 
 logging:
   file:
     path: D:\\LOG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8888/eureka
+
+feign:
+  hystrix:
+    enabled: true
+
 spring:
   application:
-    name: pethub
+    name: maintain
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
