@@ -17,6 +17,8 @@ eureka:
     instance-id:  127.0.0.1:${spring.application.name}:${server.port}
 
 spring:
+  application:
+    name: gateway
   cloud:
     gateway:
       discovery:
@@ -33,9 +35,6 @@ spring:
           uri: lb://websocket
           predicates:
             - Path=/websocket/**
-
-  application:
-    name: gateway
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

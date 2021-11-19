@@ -26,6 +26,7 @@ public class ErrorSysLog extends BaseEntity {
     private String description;
     private int logLevel;
     private int errorCode;
+    private int port;
 
     @Override
     public boolean equals(Object o) {

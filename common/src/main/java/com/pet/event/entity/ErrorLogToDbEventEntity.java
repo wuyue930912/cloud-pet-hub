@@ -12,4 +12,6 @@ public class ErrorLogToDbEventEntity {
     private int logLevel;
     private String description;
     private int errorCode;
+    private String ip;
+    private int port;
 }
