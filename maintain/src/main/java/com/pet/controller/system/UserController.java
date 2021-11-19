@@ -5,11 +5,9 @@ import com.pet.annotation.TimeConsuming;
 import com.pet.constant.ErrorMsgConstant;
 import com.pet.constant.LogLevelConstant;
 import com.pet.convert.SysUserConvert;
-import com.pet.service.manager.PushLogService;
 import com.pet.service.system.UserService;
 import com.pet.vo.PageParamVO;
 import com.pet.vo.PageResultVO;
-import com.pet.vo.PushLogVO;
 import com.pet.vo.system.AddUserVO;
 import com.pet.vo.ResponseResultVO;
 import com.pet.vo.system.SearchUserResultVO;
@@ -22,8 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -34,10 +30,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
-    private final PushLogService pushLogService;
-
-    static String pushLog = "time : [%s] method : [%s] param : [%s]";
 
     // 接口列表
     private static final String ADD_USER = "新增用户";
@@ -68,7 +60,6 @@ public class UserController {
     })
     public ResponseEntity<ResponseResultVO<String>> addUser(@RequestBody @Validated AddUserVO vo) {
         log.info("start add user, username : {} , pwd : {}", vo.getUserName(), vo.getUserPwd());
-        pushLogToWeb("addUser", vo);
         return ResponseEntity.ok(userService.add(SysUserConvert.INSTANCE.vo2dto(vo)));
     }
 
@@ -88,7 +79,6 @@ public class UserController {
     })
     public ResponseEntity<ResponseResultVO<String>> del(@PathVariable String userId) {
         log.info("start delete user, userId :{}", userId);
-        pushLogToWeb("delUser", userId);
         return ResponseEntity.ok(userService.delUser(userId));
     }
 
@@ -109,14 +99,7 @@ public class UserController {
     })
     public ResponseEntity<ResponseResultVO<PageResultVO<List<SearchUserResultVO>>>> searchUser(@RequestBody @Validated PageParamVO<SearchUserVO> pageParam) {
         log.info("start search user, example :{}", pageParam.toString());
-        pushLogToWeb("searchUser", pageParam);
         return ResponseEntity.ok(userService.searchUser(pageParam));
     }
-
-    private void pushLogToWeb(String method, Object param) {
-        PushLogVO pushLogVO = new PushLogVO();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        pushLogVO.setMsg(String.format(pushLog, format.format(new Date()), method, param));
-        pushLogService.pushDateToWeb(pushLogVO);
-    }
 }
+
