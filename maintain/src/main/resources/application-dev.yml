@@ -10,8 +10,14 @@ logging:
 
 eureka:
   client:
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8888/eureka
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id:  127.0.0.1:${spring.application.name}:${server.port}
 
 feign:
   hystrix:
