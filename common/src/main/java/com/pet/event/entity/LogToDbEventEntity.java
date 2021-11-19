@@ -15,4 +15,5 @@ public class LogToDbEventEntity {
     private String description;
     private String realMethod;
     private String ip;
+    private int port;
 }

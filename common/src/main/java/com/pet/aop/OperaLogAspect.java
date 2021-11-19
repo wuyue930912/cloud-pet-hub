@@ -5,11 +5,12 @@ import com.pet.constant.HttpConstant;
 import com.pet.event.LogToDbEvent;
 import com.pet.event.entity.LogToDbEventEntity;
 import com.pet.po.SysUser;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -26,10 +27,13 @@ import java.util.Objects;
 @Slf4j
 @Aspect
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OperaLogAspect {
 
     private final ApplicationEventPublisher publisher;
+
+    @Value("${server.port}")
+    private int port;
 
     @Pointcut("@annotation(com.pet.annotation.LogController)")
     public void annotationPoint() {
@@ -53,8 +57,8 @@ public class OperaLogAspect {
         String realMethodName = joinPoint.getSignature().getName();
         String requestIp = getIp(request);
 
-        log.info("Aspect = [{}] ,user [{}] , method [{}] , logLevel [{}] , do [{}] , realMethod [{}] , ip [{}]",
-                new Date(), Objects.isNull(user) ? "system" : user.getUserName(), logController.method(), logController.logLevel(), logController.description(), realMethodName, requestIp);
+        log.info("Aspect = port [{}], [{}] ,user [{}] , method [{}] , logLevel [{}] , do [{}] , realMethod [{}] , ip [{}]",
+                port, new Date(), Objects.isNull(user) ? "system" : user.getUserName(), logController.method(), logController.logLevel(), logController.description(), realMethodName, requestIp);
 
         // 异步处理日志
         publisher.publishEvent(new LogToDbEvent(
@@ -66,6 +70,7 @@ public class OperaLogAspect {
                         .description(logController.description())
                         .realMethod(realMethodName)
                         .ip(requestIp)
+                        .port(port)
                         .build()));
     }
 

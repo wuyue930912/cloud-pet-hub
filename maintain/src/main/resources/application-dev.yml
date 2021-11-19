@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 7003
   servlet:
     session:
       timeout: PT03M

@@ -28,6 +28,7 @@ public class SysLog extends BaseEntity {
     private String method;
     private String description;
     private String ip;
+    private int port;
 
     @Override
     public boolean equals(Object o) {
