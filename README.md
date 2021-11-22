@@ -1,5 +1,13 @@
 # 后台代码
 
+### common 公共依赖
+### eureka 服务注册中心
+### gateway 网关服务 ribbon
+### maintain 后台接口服务
+### websocket 消息推送服务
+
+#### 启动顺序 -> eureka -> gateway -> maintain(多实例) -> websocket(多实例)
+
 ----------------
 
 ### 代码规范
@@ -27,7 +35,7 @@
  
  2、aop 切面
  
- 3、config XSS拦截配置、Druid连接池配置
+ 3、config 配置类
  
  4、constant 静态常量
  
@@ -41,7 +49,7 @@
  
  9、listener 事件监听
  
- 10、po 持久化对象
+ 10、po 实体
  
  11、utils 工具包
  
