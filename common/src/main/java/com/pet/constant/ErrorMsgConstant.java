@@ -13,6 +13,14 @@ public class ErrorMsgConstant {
      */
     public static final String SYSTEM_ERROR = "系统异常";
     /**
+     * WEBSOCKET服务异常
+     */
+    public static final String WEBSOCKET_ERROR = "WEBSOCKET服务异常";
+    /**
+     * MAINTAIN服务异常
+     */
+    public static final String MAINTAIN_ERROR = "MAINTAIN服务异常";
+    /**
      * 手机号应为11位数字
      */
     public static final String PHONE_ERROR = "手机号应为11位数字";
