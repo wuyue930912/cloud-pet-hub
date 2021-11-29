@@ -17,11 +17,12 @@
     </distributionManagement>
 
     <modules>
-        <module>fallback</module>
-        <module>gateway</module>
-        <module>maintain</module>
-        <module>eureka</module>
-        <module>websocket</module>
+        <module>cloud-fallback</module>
+        <module>cloud-gateway</module>
+        <module>cloud-maintain</module>
+        <module>cloud-eureka</module>
+        <module>cloud-websocket</module>
+        <module>cloud-admin</module>
         <module>common</module>
     </modules>
 
@@ -50,6 +51,11 @@
     </dependencyManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
         <!--lombok-->
         <dependency>
