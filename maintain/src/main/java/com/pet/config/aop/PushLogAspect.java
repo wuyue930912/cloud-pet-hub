@@ -1,6 +1,8 @@
 package com.pet.config.aop;
 
 import com.pet.annotation.LogController;
+import com.pet.config.ServiceException;
+import com.pet.constant.ErrorMsgConstant;
 import com.pet.constant.HttpConstant;
 import com.pet.event.entity.LogToDbEventEntity;
 import com.pet.po.SysUser;
@@ -40,15 +42,19 @@ public class PushLogAspect {
         String realMethodName = joinPoint.getSignature().getName();
         String requestIp = getIp(request);
 
-        pushLogService.pushDateToWeb(LogToDbEventEntity.builder()
-                .date(new Date())
-                .userName(Objects.isNull(user) ? "system" : user.getUserName())
-                .method(logController.method())
-                .logLevel(logController.logLevel())
-                .description(logController.description())
-                .realMethod(realMethodName)
-                .ip(requestIp)
-                .build());
+        try {
+            pushLogService.pushDateToWeb(LogToDbEventEntity.builder()
+                    .date(new Date())
+                    .userName(Objects.isNull(user) ? "system" : user.getUserName())
+                    .method(logController.method())
+                    .logLevel(logController.logLevel())
+                    .description(logController.description())
+                    .realMethod(realMethodName)
+                    .ip(requestIp)
+                    .build());
+        } catch (Exception e) {
+            throw new ServiceException(ErrorMsgConstant.WEBSOCKET_ERROR);
+        }
     }
 
     public static String getIp(HttpServletRequest request) {
