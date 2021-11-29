@@ -17,6 +17,7 @@
     </distributionManagement>
 
     <modules>
+        <module>fallback</module>
         <module>gateway</module>
         <module>maintain</module>
         <module>eureka</module>

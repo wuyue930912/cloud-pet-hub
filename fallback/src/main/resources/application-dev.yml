@@ -1,8 +1,9 @@
 server:
-  port: 7002
+  port: 9001
+  max-http-header-size: 20480
   servlet:
     session:
-      timeout: PT03M
+      timeout: PT30M
 
 logging:
   file:
@@ -25,7 +26,7 @@ feign:
 
 spring:
   application:
-    name: maintain
+    name: fallback
 
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
