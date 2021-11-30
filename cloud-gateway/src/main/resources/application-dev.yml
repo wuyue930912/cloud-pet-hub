@@ -10,7 +10,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://127.0.0.1:8888/eureka
+      defaultZone: http://eureka:wuyue930912@127.0.0.1:8888/eureka
   instance:
     prefer-ip-address: true
     ip-address: 127.0.0.1
@@ -61,7 +61,20 @@ spring:
           uri: lb://fallback
           predicates:
             - Path=/fallback/**
-
+        # eureka服务路由
+        - id: eureka
+          uri: http://127.0.0.1:8888
+          predicates:
+            - Path=/eureka/**
+          filters:
+            - StripPrefix=1
+        # admin服务路由
+        - id: admin
+          uri: lb://admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
 feign:
   hystrix:
     enabled: true

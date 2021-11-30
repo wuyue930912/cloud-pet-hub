@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings> 
+<localRepository>C:\Users\yue.wu_sz\.m2\repository</localRepository>
+    <mirrors>
+        <mirror>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <mirrorOf>central</mirrorOf>
+        </mirror>
+    </mirrors>
+  <profiles>
+    <profile>
+       <id>nexus</id> 
+        <repositories>
+            <repository>
+                <id>nexus</id>
+                <name>local private nexus</name>
+                <url>http://maven.oschina.net/content/groups/public/</url>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>false</enabled>
+                </snapshots>
+            </repository>
+        </repositories>
+        
+        <pluginRepositories>
+            <pluginRepository>
+            <id>nexus</id>
+            <name>local private nexus</name>
+            <url>http://maven.oschina.net/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            </pluginRepository>
+        </pluginRepositories>
+    </profile></profiles>
+</settings>

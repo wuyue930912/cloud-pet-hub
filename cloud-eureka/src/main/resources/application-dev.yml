@@ -30,10 +30,11 @@ management:
 spring:
   application:
     name: eureka
-  boot:
-    admin:
-      client:
-        url: http://127.0.0.1:8889
+  security:
+    user:
+      name: eureka
+      password: wuyue930912
+      roles: SUPERUSER
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
