@@ -1,0 +1,89 @@
+server:
+  port: 80
+
+logging:
+  file:
+    path: D:\\LOG
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka:wuyue930912@127.0.0.1:8888/eureka
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: 127.0.0.1:${spring.application.name}:${server.port}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+spring:
+  application:
+    name: gateway
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  cloud:
+    gateway:
+      routes:
+        # maintain服务路由
+        - id: maintain
+          uri: lb://maintain
+          predicates:
+            - Path=/maintain/**
+          filters:
+            - StripPrefix=1
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: forward:/fallback/error
+        # websocket服务路由
+        - id: websocket
+          uri: lb://websocket
+          predicates:
+            - Path=/websocket/**
+          filters:
+            - StripPrefix=1
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: forward:/fallback/error1
+        # fallback服务路由
+        - id: fallback
+          uri: lb://fallback
+          predicates:
+            - Path=/fallback/**
+        # eureka服务路由
+        - id: eureka
+          uri: http://127.0.0.1:8888
+          predicates:
+            - Path=/eureka/**
+          filters:
+            - StripPrefix=1
+        # admin服务路由
+        - id: admin
+          uri: lb://admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            # 全局熔断器5s超时
+            timeoutInMilliseconds: 5000
