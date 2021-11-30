@@ -3,12 +3,12 @@ server:
 
 spring:
   application:
-    name: maintain
+    name: websocket
   cloud:
     config:
       uri: http://localhost:8887
       label: master
-      name: maintain
+      name: websocket
       profile: dev
       discovery:
         enabled: true
