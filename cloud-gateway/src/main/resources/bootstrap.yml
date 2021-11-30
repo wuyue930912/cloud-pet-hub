@@ -1,0 +1,28 @@
+server:
+  port: 80
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    config:
+      uri: http://localhost:8887
+      label: master
+      name: gateway
+      profile: dev
+      discovery:
+        enabled: true
+        service-id: config
+      fail-fast: true
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka:wuyue930912@127.0.0.1:8888/eureka
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: 127.0.0.1:${spring.application.name}:${server.port}
