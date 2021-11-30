@@ -23,6 +23,7 @@
         <module>cloud-eureka</module>
         <module>cloud-websocket</module>
         <module>cloud-admin</module>
+        <module>cloud-config</module>
         <module>common</module>
     </modules>
 
